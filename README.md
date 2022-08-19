@@ -1,6 +1,6 @@
 # VideoToggler
 
-A simple video tool for quickly removing several segments in a video file.
+A simple video tool for quickly removing several segments in a video file using [PasVlcLib](https://prog.olsztyn.pl/paslibvlc/).
 
 (unimplemented)
 
