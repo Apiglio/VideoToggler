@@ -1,0 +1,100 @@
+object Form_VideoToggler: TForm_VideoToggler
+  Left = 1430
+  Height = 575
+  Top = 493
+  Width = 862
+  Caption = 'Apiglio Video Toggler'
+  ClientHeight = 575
+  ClientWidth = 862
+  Constraints.MinHeight = 192
+  DesignTimePPI = 144
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  Position = poScreenCenter
+  LCLVersion = '1.8.4.0'
+  object GroupBox_TimelineToggle: TGroupBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 8
+    Height = 101
+    Top = 466
+    Width = 846
+    Anchors = [akLeft, akRight, akBottom]
+    BorderSpacing.Left = 8
+    BorderSpacing.Top = 8
+    BorderSpacing.Right = 8
+    BorderSpacing.Bottom = 8
+    Constraints.MinHeight = 64
+    TabOrder = 0
+  end
+  object Button1: TButton
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = GroupBox_TimelineToggle
+    Left = 640
+    Height = 32
+    Top = 426
+    Width = 214
+    Anchors = [akRight, akBottom]
+    BorderSpacing.Right = 8
+    Caption = 'AddTickAtCursor'
+    OnClick = Button1Click
+    TabOrder = 1
+  end
+  object PasLibVlcPlayer_Preview: TPasLibVlcPlayer
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Edit_VideoFileName
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Button1
+    AnchorSideBottom.Control = GroupBox_TimelineToggle
+    Left = 8
+    Height = 410
+    Top = 48
+    Width = 624
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Left = 8
+    BorderSpacing.Top = 8
+    BorderSpacing.Right = 8
+    BevelOuter = bvNone
+    Caption = 'PasLibVlcPlayer_Preview'
+    ParentColor = False
+    TabOrder = 2
+    SnapShotFmt = 'png'
+    OnMediaPlayerPositionChanged = PasLibVlcPlayer_PreviewMediaPlayerPositionChanged
+    MouseEventsHandler = mehComponent
+  end
+  object Button_play: TButton
+    AnchorSideLeft.Control = Button1
+    AnchorSideRight.Control = Button1
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Button1
+    Left = 640
+    Height = 33
+    Top = 389
+    Width = 214
+    Anchors = [akLeft, akRight, akBottom]
+    BorderSpacing.Bottom = 4
+    Caption = 'Play / Pause / Resume'
+    OnClick = Button_playClick
+    TabOrder = 3
+  end
+  object Edit_VideoFileName: TEdit
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = PasLibVlcPlayer_Preview
+    AnchorSideRight.Side = asrBottom
+    Left = 8
+    Height = 32
+    Top = 8
+    Width = 624
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 8
+    BorderSpacing.Top = 8
+    TabOrder = 4
+    Text = 'F:\_公众号发布\Video\LabelRanker.mp4'
+  end
+end
