@@ -4,13 +4,13 @@
     <PathDelim Value="\"/>
     <Version Value="10"/>
     <BuildModes Active="Default"/>
-    <Units Count="17">
+    <Units Count="136">
       <Unit0>
         <Filename Value="VideoToggler.lpr"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="16"/>
-        <UsageCount Value="30"/>
+        <UsageCount Value="49"/>
       </Unit0>
       <Unit1>
         <Filename Value="form_video_toggler.pas"/>
@@ -19,160 +19,1300 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="70"/>
-        <CursorPos X="20" Y="97"/>
-        <UsageCount Value="30"/>
+        <TopLine Value="92"/>
+        <CursorPos X="58" Y="110"/>
+        <UsageCount Value="49"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="timeline_toggle.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="235"/>
-        <CursorPos X="13" Y="267"/>
-        <UsageCount Value="30"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="477"/>
+        <CursorPos X="84" Y="495"/>
+        <UsageCount Value="49"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\avcodec.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="46" Y="21"/>
+        <UsageCount Value="36"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\avdevice.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="76"/>
+        <CursorPos X="25" Y="19"/>
+        <UsageCount Value="36"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\avfilter.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="16"/>
+        <CursorPos X="46" Y="45"/>
+        <UsageCount Value="36"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\avformat.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2799"/>
+        <CursorPos X="51" Y="2881"/>
+        <UsageCount Value="36"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\avresample.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="244"/>
+        <CursorPos X="42" Y="19"/>
+        <UsageCount Value="36"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\avutil.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="482"/>
+        <CursorPos X="48" Y="16"/>
+        <UsageCount Value="36"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavcodec_avdct.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavcodec_avfft.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavcodec_d3d11va.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavcodec_dirac.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavcodec_dv_profile.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavcodec_dxva2.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavcodec_jni.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavcodec_mediacodec.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavcodec_qsv.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavcodec_vaapi.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavcodec_vda.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavcodec_vdpau.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit20>
+      <Unit21>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavcodec_version.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavcodec_videotoolbox.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit22>
+      <Unit23>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavcodec_vorbis_parser.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit23>
+      <Unit24>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavcodec_xvmc.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit24>
+      <Unit25>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavdevice_version.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit25>
+      <Unit26>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavfilter_avfiltergraph.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit26>
+      <Unit27>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavfilter_buffersink.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit27>
+      <Unit28>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavfilter_buffersrc.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit28>
+      <Unit29>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavfilter_version.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit29>
+      <Unit30>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavformat_avio.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit30>
+      <Unit31>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavformat_version.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit31>
+      <Unit32>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavresample_version.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit32>
+      <Unit33>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_adler32.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit33>
+      <Unit34>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_aes.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit34>
+      <Unit35>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_aes_ctr.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit35>
+      <Unit36>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_attributes.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit36>
+      <Unit37>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_audio_fifo.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit37>
+      <Unit38>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_avassert.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit38>
+      <Unit39>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_avconfig.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit39>
+      <Unit40>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_avstring.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit40>
+      <Unit41>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_base64.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit41>
+      <Unit42>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_blowfish.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit42>
+      <Unit43>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_bprint.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit43>
+      <Unit44>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_bswap.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit44>
+      <Unit45>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_buffer.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit45>
+      <Unit46>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_camellia.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit46>
+      <Unit47>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_cast5.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit47>
+      <Unit48>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_channel_layout.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit48>
+      <Unit49>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_common.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit49>
+      <Unit50>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_cpu.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit50>
+      <Unit51>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_crc.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit51>
+      <Unit52>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_des.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit52>
+      <Unit53>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_dict.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit53>
+      <Unit54>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_display.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit54>
+      <Unit55>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_downmix_info.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit55>
+      <Unit56>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_error.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit56>
+      <Unit57>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_eval.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit57>
+      <Unit58>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_ffversion.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit58>
+      <Unit59>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_fifo.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit59>
+      <Unit60>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_file.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit60>
+      <Unit61>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_frame.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit61>
+      <Unit62>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_hash.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit62>
+      <Unit63>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_hmac.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit63>
+      <Unit64>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_hwcontext.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit64>
+      <Unit65>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_hwcontext_cuda.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit65>
+      <Unit66>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_hwcontext_d3d11va.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit66>
+      <Unit67>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_hwcontext_drm.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit67>
+      <Unit68>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_hwcontext_dxva2.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit68>
+      <Unit69>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_hwcontext_qsv.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit69>
+      <Unit70>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_hwcontext_vaapi.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit70>
+      <Unit71>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_hwcontext_vdpau.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit71>
+      <Unit72>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_hwcontext_videotoolbox.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit72>
+      <Unit73>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_imgutils.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit73>
+      <Unit74>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_intfloat.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit74>
+      <Unit75>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_intreadwrite.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit75>
+      <Unit76>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_lfg.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit76>
+      <Unit77>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_log.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit77>
+      <Unit78>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_lzo.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit78>
+      <Unit79>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_macros.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit79>
+      <Unit80>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_mastering_display_metadata.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit80>
+      <Unit81>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_mathematics.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit81>
+      <Unit82>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_md5.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit82>
+      <Unit83>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_mem.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit83>
+      <Unit84>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_motion_vector.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit84>
+      <Unit85>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_murmur3.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit85>
+      <Unit86>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_opt.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit86>
+      <Unit87>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_parseutils.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit87>
+      <Unit88>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_pixdesc.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit88>
+      <Unit89>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_pixelutils.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit89>
+      <Unit90>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_pixfmt.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit90>
+      <Unit91>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_random_seed.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit91>
+      <Unit92>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_rational.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit92>
+      <Unit93>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_rc4.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit93>
+      <Unit94>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_replaygain.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit94>
+      <Unit95>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_ripemd.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit95>
+      <Unit96>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_samplefmt.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit96>
+      <Unit97>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_sha.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit97>
+      <Unit98>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_sha512.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit98>
+      <Unit99>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_spherical.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit99>
+      <Unit100>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_stereo3d.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit100>
+      <Unit101>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_tea.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit101>
+      <Unit102>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_threadmessage.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit102>
+      <Unit103>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_time.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit103>
+      <Unit104>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_timecode.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit104>
+      <Unit105>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_timestamp.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit105>
+      <Unit106>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_tree.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit106>
+      <Unit107>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_twofish.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit107>
+      <Unit108>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_version.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit108>
+      <Unit109>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libavutil_xtea.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit109>
+      <Unit110>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libpostproc_version.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit110>
+      <Unit111>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libswresample_version.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit111>
+      <Unit112>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\libswscale_version.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit112>
+      <Unit113>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\postprocess.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit113>
+      <Unit114>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\swresample.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit114>
+      <Unit115>
+        <Filename Value="..\_Downloaded_Units\ffmpeg-fpc\binding\swscale.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="36"/>
+      </Unit115>
+      <Unit116>
         <Filename Value="C:\lazarus\lcl\extctrls.pp"/>
         <UnitName Value="ExtCtrls"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="1032"/>
-        <CursorPos X="15" Y="1049"/>
+        <TopLine Value="1008"/>
+        <CursorPos X="3" Y="1026"/>
         <UsageCount Value="10"/>
-      </Unit3>
-      <Unit4>
+      </Unit116>
+      <Unit117>
         <Filename Value="C:\lazarus\lcl\graphics.pp"/>
         <UnitName Value="Graphics"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="1044"/>
         <CursorPos X="30" Y="1078"/>
         <UsageCount Value="12"/>
-      </Unit4>
-      <Unit5>
+      </Unit117>
+      <Unit118>
         <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\objpas\classes\classesh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="75"/>
         <CursorPos X="46" Y="94"/>
         <UsageCount Value="10"/>
-      </Unit5>
-      <Unit6>
+      </Unit118>
+      <Unit119>
         <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\objpas\classes\lists.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="235"/>
         <CursorPos X="36" Y="242"/>
         <UsageCount Value="10"/>
-      </Unit6>
-      <Unit7>
+      </Unit119>
+      <Unit120>
         <Filename Value="C:\lazarus\lcl\include\brush.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="8"/>
         <CursorPos Y="38"/>
         <UsageCount Value="12"/>
-      </Unit7>
-      <Unit8>
+      </Unit120>
+      <Unit121>
         <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\objpas\sysutils\sysunih.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="34"/>
         <CursorPos X="10" Y="17"/>
         <UsageCount Value="10"/>
-      </Unit8>
-      <Unit9>
+      </Unit121>
+      <Unit122>
         <Filename Value="C:\lazarus\lcl\controls.pp"/>
         <UnitName Value="Controls"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="2303"/>
-        <CursorPos X="16" Y="2321"/>
+        <TopLine Value="1044"/>
+        <CursorPos X="3" Y="1062"/>
         <UsageCount Value="10"/>
-      </Unit9>
-      <Unit10>
+      </Unit122>
+      <Unit123>
         <Filename Value="C:\lazarus\fpc\3.0.4\source\packages\fcl-image\src\fpcanvas.pp"/>
         <UnitName Value="FPCanvas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="341"/>
         <CursorPos X="19" Y="350"/>
         <UsageCount Value="10"/>
-      </Unit10>
-      <Unit11>
+      </Unit123>
+      <Unit124>
         <Filename Value="..\_Downloaded_Units\PasLibVlc\source.vcl\PasLibVlcPlayerUnit.pas"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="117"/>
-        <CursorPos X="24" Y="136"/>
-        <UsageCount Value="12"/>
+        <TopLine Value="144"/>
+        <CursorPos X="26" Y="188"/>
+        <UsageCount Value="15"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit11>
-      <Unit12>
+      </Unit124>
+      <Unit125>
         <Filename Value="..\_Downloaded_Units\PasLibVlc\source\PasLibVlcClassUnit.pas"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="3" Y="124"/>
-        <UsageCount Value="10"/>
+        <TopLine Value="129"/>
+        <CursorPos X="99" Y="131"/>
+        <UsageCount Value="13"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit12>
-      <Unit13>
+      </Unit125>
+      <Unit126>
         <Filename Value="..\_Downloaded_Units\PasLibVlc\source\PasLibVlcUnit.pas"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="3551"/>
-        <CursorPos X="3" Y="3569"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="7207"/>
+        <CursorPos X="28" Y="7271"/>
+        <UsageCount Value="13"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit13>
-      <Unit14>
+      </Unit126>
+      <Unit127>
         <Filename Value="C:\lazarus\lcl\include\customform.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="191"/>
         <CursorPos Y="212"/>
         <UsageCount Value="10"/>
-      </Unit14>
-      <Unit15>
+      </Unit127>
+      <Unit128>
         <Filename Value="C:\lazarus\lcl\include\control.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="5610"/>
         <CursorPos Y="5629"/>
         <UsageCount Value="10"/>
-      </Unit15>
-      <Unit16>
+      </Unit128>
+      <Unit129>
         <Filename Value="C:\lazarus\lcl\include\scrollingwincontrol.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="283"/>
         <CursorPos Y="316"/>
         <UsageCount Value="10"/>
-      </Unit16>
+      </Unit129>
+      <Unit130>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\win\wininc\ascdef.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="452"/>
+        <CursorPos X="111" Y="470"/>
+        <UsageCount Value="10"/>
+      </Unit130>
+      <Unit131>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\win\wininc\base.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="83"/>
+        <CursorPos X="6" Y="101"/>
+        <UsageCount Value="10"/>
+      </Unit131>
+      <Unit132>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\win\sysosh.inc"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="3" Y="19"/>
+        <UsageCount Value="10"/>
+      </Unit132>
+      <Unit133>
+        <Filename Value="C:\lazarus\lcl\lclclasses.pp"/>
+        <UnitName Value="LCLClasses"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="24"/>
+        <CursorPos X="3" Y="42"/>
+        <UsageCount Value="10"/>
+      </Unit133>
+      <Unit134>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\inc\threadh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="19"/>
+        <CursorPos X="3" Y="35"/>
+        <UsageCount Value="10"/>
+      </Unit134>
+      <Unit135>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\win\wininc\redef.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="321"/>
+        <CursorPos Y="343"/>
+        <UsageCount Value="10"/>
+      </Unit135>
     </Units>
-    <JumpHistory Count="8" HistoryIndex="7">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="form_video_toggler.pas"/>
-        <Caret Line="86" Column="75" TopLine="64"/>
+        <Filename Value="timeline_toggle.pas"/>
+        <Caret Line="424" TopLine="408"/>
       </Position1>
       <Position2>
-        <Filename Value="form_video_toggler.pas"/>
-        <Caret Line="60" Column="56" TopLine="41"/>
+        <Filename Value="timeline_toggle.pas"/>
+        <Caret Line="421" Column="21" TopLine="405"/>
       </Position2>
       <Position3>
-        <Filename Value="form_video_toggler.pas"/>
-        <Caret Line="86" TopLine="65"/>
+        <Filename Value="timeline_toggle.pas"/>
+        <Caret Line="424" Column="10" TopLine="405"/>
       </Position3>
       <Position4>
-        <Filename Value="form_video_toggler.pas"/>
-        <Caret Line="86" Column="54" TopLine="65"/>
+        <Filename Value="timeline_toggle.pas"/>
+        <Caret Line="461" Column="5" TopLine="430"/>
       </Position4>
       <Position5>
-        <Filename Value="form_video_toggler.pas"/>
-        <Caret Line="87" Column="5" TopLine="65"/>
+        <Filename Value="timeline_toggle.pas"/>
+        <Caret Line="440" Column="38" TopLine="416"/>
       </Position5>
       <Position6>
         <Filename Value="form_video_toggler.pas"/>
-        <Caret Line="92" Column="46" TopLine="65"/>
+        <Caret Line="9" Column="39"/>
       </Position6>
       <Position7>
         <Filename Value="form_video_toggler.pas"/>
-        <Caret Line="85" Column="3" TopLine="65"/>
+        <Caret Line="72" Column="24" TopLine="37"/>
       </Position7>
       <Position8>
-        <Filename Value="form_video_toggler.pas"/>
-        <Caret Line="87" Column="5" TopLine="66"/>
+        <Filename Value="timeline_toggle.pas"/>
+        <Caret Line="57" Column="19" TopLine="53"/>
       </Position8>
+      <Position9>
+        <Filename Value="form_video_toggler.pas"/>
+        <Caret Line="48" Column="28" TopLine="47"/>
+      </Position9>
+      <Position10>
+        <Filename Value="timeline_toggle.pas"/>
+        <Caret Line="329" Column="13" TopLine="310"/>
+      </Position10>
+      <Position11>
+        <Filename Value="timeline_toggle.pas"/>
+        <Caret Line="417" Column="29" TopLine="399"/>
+      </Position11>
+      <Position12>
+        <Filename Value="form_video_toggler.pas"/>
+        <Caret Line="69" Column="32" TopLine="63"/>
+      </Position12>
+      <Position13>
+        <Filename Value="timeline_toggle.pas"/>
+        <Caret Line="75" Column="14" TopLine="57"/>
+      </Position13>
+      <Position14>
+        <Filename Value="timeline_toggle.pas"/>
+        <Caret Line="71" Column="15" TopLine="54"/>
+      </Position14>
+      <Position15>
+        <Filename Value="form_video_toggler.pas"/>
+        <Caret Line="91" Column="85" TopLine="79"/>
+      </Position15>
+      <Position16>
+        <Filename Value="form_video_toggler.pas"/>
+        <Caret Line="79" Column="87" TopLine="38"/>
+      </Position16>
+      <Position17>
+        <Filename Value="form_video_toggler.pas"/>
+        <Caret Line="76" Column="50" TopLine="55"/>
+      </Position17>
+      <Position18>
+        <Filename Value="timeline_toggle.pas"/>
+        <Caret Line="314" Column="27" TopLine="306"/>
+      </Position18>
+      <Position19>
+        <Filename Value="timeline_toggle.pas"/>
+        <Caret Line="344" Column="19" TopLine="312"/>
+      </Position19>
+      <Position20>
+        <Filename Value="form_video_toggler.pas"/>
+        <Caret Line="68" Column="21" TopLine="49"/>
+      </Position20>
+      <Position21>
+        <Filename Value="timeline_toggle.pas"/>
+        <Caret Line="58" Column="15" TopLine="41"/>
+      </Position21>
+      <Position22>
+        <Filename Value="form_video_toggler.pas"/>
+        <Caret Line="71" Column="30" TopLine="49"/>
+      </Position22>
+      <Position23>
+        <Filename Value="form_video_toggler.pas"/>
+        <Caret Line="89" Column="100" TopLine="52"/>
+      </Position23>
+      <Position24>
+        <Filename Value="form_video_toggler.pas"/>
+        <Caret Line="77" Column="53" TopLine="52"/>
+      </Position24>
+      <Position25>
+        <Filename Value="form_video_toggler.pas"/>
+        <Caret Line="113" Column="14" TopLine="94"/>
+      </Position25>
+      <Position26>
+        <Filename Value="timeline_toggle.pas"/>
+        <Caret Line="90" Column="60" TopLine="62"/>
+      </Position26>
+      <Position27>
+        <Filename Value="timeline_toggle.pas"/>
+        <Caret Line="466" Column="35" TopLine="450"/>
+      </Position27>
+      <Position28>
+        <Filename Value="timeline_toggle.pas"/>
+        <Caret Line="481" Column="54" TopLine="464"/>
+      </Position28>
+      <Position29>
+        <Filename Value="form_video_toggler.pas"/>
+        <Caret Line="56" Column="27" TopLine="38"/>
+      </Position29>
+      <Position30>
+        <Filename Value="form_video_toggler.pas"/>
+        <Caret Line="119" Column="6" TopLine="91"/>
+      </Position30>
     </JumpHistory>
   </ProjectSession>
   <Debugging>

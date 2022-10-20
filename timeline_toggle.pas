@@ -7,7 +7,7 @@ unit timeline_toggle;
 interface
 
 uses
-  Classes, SysUtils, Controls, ExtCtrls, Graphics;
+  Classes, SysUtils, Controls, ExtCtrls, Graphics, Windows, Dialogs, LazUTF8;
 
 type
 
@@ -55,9 +55,11 @@ type
   public
     constructor Create(AOwner:TComponent);override;
     destructor Destroy;override;
+    procedure Clear;
+
   public
     function AddTick(position:TTimelineTickPos):integer;
-    procedure DelTick(position:TTimelineTickPos);
+    procedure DelTick(Index:Integer);
 
   public
     procedure AddTickAtCursorPos;
@@ -78,22 +80,34 @@ type
     FOnUserChangeCursorPos:TTimelineCursorChangeEvent;
   public
     property OnUserChangeCursorPos:TTimelineCursorChangeEvent read FOnUserChangeCursorPos write FOnUserChangeCursorPos;
+
+  //对接视频剪辑的部分
+  private
+    FInputName:string;
+    FOutputName:string;
+  public
+    property InputName:string read FInputName write FInputName;
+    property OutputName:string read FOutputName write FOutputName;
+  public
+    procedure Run;
+
   end;
 
 implementation
 
+function zfill(value:integer;digit:integer):string;
+var len:integer;
+begin
+  result:=IntToStr(value);
+  len:=digit-length(result);
+  while len>0 do begin
+    result:='0'+result;
+    dec(len);
+  end;
+end;
+
 function millisec_to_format(ms:integer):string;
 var a,b:integer;
-  function zfill(value:integer;digit:integer):string;
-  var len:integer;
-  begin
-    result:=IntToStr(value);
-    len:=digit-length(result);
-    while len>0 do begin
-      result:='0'+result;
-      dec(len);
-    end;
-  end;
 begin
   a:=ms;
   result:=zfill(a div 3600000,1);
@@ -106,6 +120,7 @@ begin
 end;
 
 { TTimelineToggleSegment }
+
 procedure TTimelineToggleSegment.XorEnabled;
 begin
   Enabled:=not Enabled;
@@ -117,10 +132,12 @@ function TTimelineToggle.TimelinePosToPixelPos(Timeline:TTimelineTickPos):Intege
 begin
   result:=(Width-2*FBoundary-FRightBound)*(Timeline-FMin) div (FMax-FMin) + FBoundary;
 end;
+
 function TTimelineToggle.PixelPosToTimelinePos(PixelPos:Integer):TTimelineTickPos;
 begin
   result:=(FMax-FMin)*(PixelPos-FBoundary) div (Width-2*FBoundary-FRightBound) + FMin;
 end;
+
 function TTimelineToggle.SegmentToRect(Segment:TTimelineToggleSegment):TRect;
 begin
   with result do begin
@@ -148,7 +165,7 @@ procedure TTimelineToggle.Paint;
 var pi,tlt,tlb,tmpx:integer;
 begin
   inherited Paint;
-  //为什么文字越描越粗？
+
   Canvas.Brush.Style:=bsSolid;
   Canvas.Brush.Color:=clForm;
   Canvas.Clear;
@@ -249,8 +266,7 @@ begin
   FBoundary:=8;
   FTimeLineTop:=36;
   FRightBound:=64;
-  //Constraints.MinHeight:=64;//16+48;
-  //Constraints.MinWidth:=16;
+
   FEnabledColor:=$ddddff;//$eeffee;
   FDisabledColor:=$dddddd;//$eeeeff;
   with FTickCaptionStyle do begin
@@ -293,6 +309,43 @@ begin
   end;
   FTicks.Free;
   inherited Destroy;
+end;
+
+procedure TTimelineToggle.Clear;
+var seg:TTimelineToggleSegment;
+    tick,tick2:TTimelineToggleTick;
+begin
+  while FSegments.Count>0 do begin
+    seg:=TTimelineToggleSegment(FSegments.Items[0]);
+    seg.Free;
+    FSegments.Delete(0);
+  end;
+  while FTicks.Count>0 do begin
+    tick:=TTimelineToggleTick(FTicks.Items[0]);
+    tick.Free;
+    FTicks.Delete(0);
+  end;
+
+  FMin:=0;
+  FMax:=100;
+  FCursorPos:=0;
+
+  FTicks:=TList.Create;
+  tick:=TTimelineToggleTick.Create;
+  tick.Position:=FMin;
+  tick.Caption:=millisec_to_format(FMin);
+  FTicks.Add(tick);
+  tick2:=TTimelineToggleTick.Create;
+  tick2.Position:=FMax;
+  tick2.Caption:=millisec_to_format(FMax);
+  FTicks.Add(tick2);
+  FSegments:=TList.Create;
+  seg:=TTimelineToggleSegment.Create;
+  seg.Left:=tick;
+  seg.Right:=tick2;
+  seg.Enabled:=false;
+  FSegments.Add(seg);
+
 end;
 
 function TTimelineToggle.AddTick(position:TTimelineTickPos):integer;
@@ -340,7 +393,7 @@ begin
   Paint;
 end;
 
-procedure TTimelineToggle.DelTick(position:TTimelineTickPos);
+procedure TTimelineToggle.DelTick(Index:Integer);
 begin
 
 end;
@@ -380,8 +433,73 @@ end;
 
 procedure TTimelineToggle.SetCursorPos(value:TTimelineTickPos);
 begin
+  if (FCursorPos>FMax) or (FCursorPos<FMin) then raise Exception.Create('CursorPos值超出边界值。');
   FCursorPos:=value;
   Paint;
+end;
+
+
+//.\ffmpeg.exe -i foochow.mp4 -ss 00:00:00 -vframes 1 out.png
+//.\ffmpeg -i foochow.mp4 -i out.png -map 0 -map 1 -c copy -c:v:1 png -disposition:v:1 attached_pic test.mp4
+//.\ffmpeg.exe -y -i Foochow.mp4 -ss 0:0:15 -to 0:0:17 out3.ts
+//.\ffmpeg.exe -i "concat:out1.ts|out2.ts|out3.ts" -c copy output.mp4
+procedure TTimelineToggle.Run;
+var seg:TTimelineToggleSegment;
+    pi,ts:integer;
+    cmd:string;
+    thumb_pos:TTimelineTickPos;
+    batch_lines:TStringlist;
+
+begin
+  batch_lines:=TStringlist.Create;
+  try
+    batch_lines.add('setlocal');
+
+    //clip
+    pi:=0;
+    ts:=0;
+    thumb_pos:=-1;
+    while pi<FSegments.Count do begin
+      seg:=TTimelineToggleSegment(FSegments.Items[pi]);
+      if seg.Enabled then begin
+        if thumb_pos<0 then thumb_pos:=seg.Left.Position;
+        cmd:=' -y -i "'+FInputName+'" -ss ';
+        cmd:=cmd+millisec_to_format(seg.Left.Position);
+        cmd:=cmd+' -to ';
+        cmd:=cmd+millisec_to_format(seg.Right.Position);
+        cmd:=cmd+' OutTemp_'+IntToStr(ts)+'.ts';
+        batch_lines.add('.\ffmpeg.exe '+cmd);
+        inc(ts);
+      end;
+      inc(pi);
+    end;
+    if ts=0 then exit;
+
+    //thumbnail
+    batch_lines.add('.\ffmpeg.exe -y -i "'+FInputName+'" -ss '+millisec_to_format(thumb_pos)+' -vframes 1 OutTemp_Thumb.png');
+
+    //concat
+    cmd:='concat:OutTemp_0.ts';
+    for pi:=1 to ts-1 do cmd:=cmd+'|OutTemp_'+IntToStr(pi)+'.ts';
+    batch_lines.add('.\ffmpeg.exe -y -i "'+cmd+'" -i OutTemp_Thumb.png -map 0 -map 1 -c copy -c:v:1 png -disposition:v:1 attached_pic Output.mp4');
+
+    //delete temporary file
+    for pi:=0 to ts-1 do
+      batch_lines.add('del OutTemp_'+IntToStr(pi)+'.ts');
+    batch_lines.add('del OutTemp_Thumb.png');
+
+    //rename output
+    batch_lines.add('move Output.mp4 "'+FOutputName+'"');
+
+    //run batch file
+    batch_lines.SaveToFile('video_toggler_gen.bat');
+    ShellExecute(0,'open','cmd.exe','/c call "video_toggler_gen.bat"',pchar(ExtractFileDir(ParamStr(0))),SW_HIDE);
+
+  finally
+    batch_lines.Free;
+  end;
+
+
 end;
 
 end.

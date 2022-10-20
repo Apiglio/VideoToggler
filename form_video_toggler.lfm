@@ -1,15 +1,18 @@
 object Form_VideoToggler: TForm_VideoToggler
-  Left = 1430
-  Height = 575
-  Top = 493
-  Width = 862
+  Left = 1332
+  Height = 240
+  Top = 788
+  Width = 360
+  AllowDropFiles = True
   Caption = 'Apiglio Video Toggler'
-  ClientHeight = 575
-  ClientWidth = 862
-  Constraints.MinHeight = 192
+  ClientHeight = 240
+  ClientWidth = 360
+  Constraints.MinHeight = 240
+  Constraints.MinWidth = 360
   DesignTimePPI = 144
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnDropFiles = FormDropFiles
   Position = poScreenCenter
   LCLVersion = '1.8.4.0'
   object GroupBox_TimelineToggle: TGroupBox
@@ -20,41 +23,41 @@ object Form_VideoToggler: TForm_VideoToggler
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 8
-    Height = 101
-    Top = 466
-    Width = 846
+    Height = 84
+    Top = 148
+    Width = 344
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 8
     BorderSpacing.Top = 8
     BorderSpacing.Right = 8
     BorderSpacing.Bottom = 8
-    Constraints.MinHeight = 64
+    Constraints.MinHeight = 84
     TabOrder = 0
   end
-  object Button1: TButton
+  object Button_AddTick: TButton
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = GroupBox_TimelineToggle
-    Left = 640
+    Left = 192
     Height = 32
-    Top = 426
-    Width = 214
+    Top = 108
+    Width = 160
     Anchors = [akRight, akBottom]
     BorderSpacing.Right = 8
-    Caption = 'AddTickAtCursor'
-    OnClick = Button1Click
+    Caption = '添加断点'
+    OnClick = Button_AddTickClick
     TabOrder = 1
   end
   object PasLibVlcPlayer_Preview: TPasLibVlcPlayer
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Edit_VideoFileName
+    AnchorSideTop.Control = Edit_VideoOutput
     AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = Button1
+    AnchorSideRight.Control = Button_AddTick
     AnchorSideBottom.Control = GroupBox_TimelineToggle
     Left = 8
-    Height = 410
-    Top = 48
-    Width = 624
+    Height = 52
+    Top = 88
+    Width = 176
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 8
     BorderSpacing.Top = 8
@@ -68,33 +71,90 @@ object Form_VideoToggler: TForm_VideoToggler
     MouseEventsHandler = mehComponent
   end
   object Button_play: TButton
-    AnchorSideLeft.Control = Button1
-    AnchorSideRight.Control = Button1
+    AnchorSideLeft.Control = Button_AddTick
+    AnchorSideRight.Control = Button_AddTick
     AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = Button1
-    Left = 640
-    Height = 33
-    Top = 389
-    Width = 214
+    AnchorSideBottom.Control = Button_AddTick
+    Left = 192
+    Height = 32
+    Top = 72
+    Width = 160
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Bottom = 4
-    Caption = 'Play / Pause / Resume'
+    Caption = '播放 / 暂停/ 恢复'
     OnClick = Button_playClick
     TabOrder = 3
   end
   object Edit_VideoFileName: TEdit
-    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Control = Label_input
+    AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = PasLibVlcPlayer_Preview
     AnchorSideRight.Side = asrBottom
-    Left = 8
+    Left = 106
     Height = 32
     Top = 8
-    Width = 624
+    Width = 78
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 8
     BorderSpacing.Top = 8
+    OnChange = Edit_VideoFileNameChange
     TabOrder = 4
     Text = 'F:\_公众号发布\Video\LabelRanker.mp4'
+  end
+  object Button_Run: TButton
+    AnchorSideLeft.Control = Button_AddTick
+    AnchorSideRight.Control = Button_AddTick
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Button_play
+    Left = 192
+    Height = 32
+    Top = 36
+    Width = 160
+    Anchors = [akLeft, akRight, akBottom]
+    BorderSpacing.Bottom = 4
+    Caption = '执行切分'
+    OnClick = Button_RunClick
+    TabOrder = 5
+  end
+  object Edit_VideoOutput: TEdit
+    AnchorSideLeft.Control = Label_output
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Edit_VideoFileName
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = PasLibVlcPlayer_Preview
+    AnchorSideRight.Side = asrBottom
+    Left = 106
+    Height = 32
+    Top = 48
+    Width = 78
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 8
+    BorderSpacing.Top = 8
+    TabOrder = 6
+    Text = 'F:\_公众号发布\Video\LabelRanker_out.mp4'
+  end
+  object Label_input: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Edit_VideoFileName
+    Left = 8
+    Height = 24
+    Top = 8
+    Width = 90
+    BorderSpacing.Left = 8
+    Caption = '输入视频：'
+    ParentColor = False
+  end
+  object Label_output: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Edit_VideoOutput
+    AnchorSideTop.Side = asrCenter
+    Left = 8
+    Height = 24
+    Top = 52
+    Width = 90
+    BorderSpacing.Left = 8
+    Caption = '输出视频：'
+    ParentColor = False
   end
 end
