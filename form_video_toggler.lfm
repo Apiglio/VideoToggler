@@ -1,12 +1,12 @@
 object Form_VideoToggler: TForm_VideoToggler
-  Left = 1332
-  Height = 240
-  Top = 788
-  Width = 360
+  Left = 1225
+  Height = 340
+  Top = 668
+  Width = 588
   AllowDropFiles = True
   Caption = 'Apiglio Video Toggler'
-  ClientHeight = 240
-  ClientWidth = 360
+  ClientHeight = 340
+  ClientWidth = 588
   Constraints.MinHeight = 240
   Constraints.MinWidth = 360
   DesignTimePPI = 144
@@ -24,8 +24,8 @@ object Form_VideoToggler: TForm_VideoToggler
     AnchorSideBottom.Side = asrBottom
     Left = 8
     Height = 84
-    Top = 148
-    Width = 344
+    Top = 248
+    Width = 572
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 8
     BorderSpacing.Top = 8
@@ -38,9 +38,9 @@ object Form_VideoToggler: TForm_VideoToggler
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = GroupBox_TimelineToggle
-    Left = 192
+    Left = 420
     Height = 32
-    Top = 108
+    Top = 208
     Width = 160
     Anchors = [akRight, akBottom]
     BorderSpacing.Right = 8
@@ -55,9 +55,9 @@ object Form_VideoToggler: TForm_VideoToggler
     AnchorSideRight.Control = Button_AddTick
     AnchorSideBottom.Control = GroupBox_TimelineToggle
     Left = 8
-    Height = 52
+    Height = 152
     Top = 88
-    Width = 176
+    Width = 404
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 8
     BorderSpacing.Top = 8
@@ -75,9 +75,9 @@ object Form_VideoToggler: TForm_VideoToggler
     AnchorSideRight.Control = Button_AddTick
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Button_AddTick
-    Left = 192
+    Left = 420
     Height = 32
-    Top = 72
+    Top = 172
     Width = 160
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Bottom = 4
@@ -94,7 +94,7 @@ object Form_VideoToggler: TForm_VideoToggler
     Left = 106
     Height = 32
     Top = 8
-    Width = 78
+    Width = 306
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 8
     BorderSpacing.Top = 8
@@ -107,9 +107,9 @@ object Form_VideoToggler: TForm_VideoToggler
     AnchorSideRight.Control = Button_AddTick
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Button_play
-    Left = 192
+    Left = 420
     Height = 32
-    Top = 36
+    Top = 136
     Width = 160
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Bottom = 4
@@ -127,7 +127,7 @@ object Form_VideoToggler: TForm_VideoToggler
     Left = 106
     Height = 32
     Top = 48
-    Width = 78
+    Width = 306
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 8
     BorderSpacing.Top = 8

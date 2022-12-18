@@ -30,6 +30,7 @@ type
   TTimelineToggle = class(TPanel)
   private
     FMin,FMax:TTimelineTickPos;
+    FDisplayMin,FDisplayMax:TTimelineTickPos;
     FTicks:TList;
     FSegments:TList;
     FCursorPos:TTimelineTickPos;
@@ -52,6 +53,8 @@ type
     procedure MouseDown(Button:TMouseButton;Shift:TShiftState;X,Y:Integer);override;
     procedure MouseUp(Button:TMouseButton;Shift:TShiftState;X,Y:Integer);override;
     procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
+    procedure MouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
   public
     constructor Create(AOwner:TComponent);override;
     destructor Destroy;override;
@@ -130,20 +133,20 @@ end;
 
 function TTimelineToggle.TimelinePosToPixelPos(Timeline:TTimelineTickPos):Integer;
 begin
-  result:=(Width-2*FBoundary-FRightBound)*(Timeline-FMin) div (FMax-FMin) + FBoundary;
+  result:=(Width-2*FBoundary-FRightBound)*(Timeline-FDisplayMin) div (FDisplayMax-FDisplayMin) + FBoundary;
 end;
 
 function TTimelineToggle.PixelPosToTimelinePos(PixelPos:Integer):TTimelineTickPos;
 begin
-  result:=(FMax-FMin)*(PixelPos-FBoundary) div (Width-2*FBoundary-FRightBound) + FMin;
+  result:=(FDisplayMax-FDisplayMin)*(PixelPos-FBoundary) div (Width-2*FBoundary-FRightBound) + FDisplayMin;
 end;
 
 function TTimelineToggle.SegmentToRect(Segment:TTimelineToggleSegment):TRect;
 begin
   with result do begin
     Top:=FBoundary;
-    Left:=(Self.Width-2*FBoundary-FRightBound)*(Segment.Left.Position-FMin) div (FMax-FMin) + FBoundary;
-    Right:=Left+(Self.Width-2*FBoundary-FRightBound)*(Segment.Right.Position - Segment.Left.Position) div (FMax-FMin);
+    Left:=(Self.Width-2*FBoundary-FRightBound)*(Segment.Left.Position-FDisplayMin) div (FDisplayMax-FDisplayMin) + FBoundary;
+    Right:=Left+(Self.Width-2*FBoundary-FRightBound)*(Segment.Right.Position - Segment.Left.Position) div (FDisplayMax-FDisplayMin);
     Bottom:=Top+16;
   end;
 end;
@@ -162,7 +165,9 @@ begin
 end;
 
 procedure TTimelineToggle.Paint;
-var pi,tlt,tlb,tmpx:integer;
+var pi,tlt,tlb,tll,tlr,tmpx:integer;
+    pos_l,pos_r:integer;
+    first_tick,last_tick:integer;
 begin
   inherited Paint;
 
@@ -172,6 +177,8 @@ begin
 
   tlt:=FTimeLineTop;
   tlb:=Height-FBoundary;
+  tll:=Self.FBoundary;
+  tlr:=Self.Width-FBoundary-FRightBound;
 
   //segments
   Canvas.Brush.Style:=bsSolid;
@@ -182,13 +189,14 @@ begin
   begin
     with Segments[pi] do
     begin
+      pos_l:=TimelinePosToPixelPos(Left.Position);
+      pos_r:=TimelinePosToPixelPos(Right.Position);
+      if pos_r<tll then continue;
+      if pos_l>tlr then continue;
+      if pos_l<tll then pos_l:=tll;
+      if pos_r>tlr then pos_r:=tlr;
       if Enabled then Canvas.Brush.Color:=FEnabledColor else Canvas.Brush.Color:=FDisabledColor;
-      Canvas.Rectangle(
-        TimelinePosToPixelPos(Left.Position),
-        tlt,
-        TimelinePosToPixelPos(Right.Position),
-        tlb
-      );
+      Canvas.Rectangle(pos_l,tlt,pos_r,tlb);
     end;
   end;
 
@@ -196,14 +204,34 @@ begin
   Canvas.Font.Color:=clBlack;
   Canvas.Brush.Style:=bsClear;
   Canvas.Pen.Width:=0;
-  for pi:=0 to FTicks.Count-1 do
+  first_tick:=0;
+  last_tick:=FTicks.Count-1;
+  while first_tick<=last_tick do
+  begin
+    pos_l:=TimelinePosToPixelPos(Ticks[first_tick].Position);
+    if pos_l>tll then break;
+    inc(first_tick);
+  end;
+  while last_tick>=first_tick do
+  begin
+    pos_r:=TimelinePosToPixelPos(Ticks[last_tick].Position);
+    if pos_r<tlr then break;
+    dec(last_tick);
+  end;
+  Canvas.TextRect(SegmentToRect(Segments[first_tick-1]),tll,FBoundary,millisec_to_format(FDisplayMin),FTickCaptionStyle);
+  Canvas.TextOut(tlr,FBoundary,millisec_to_format(FDisplayMax));
+  for pi:=first_tick to last_tick do
   begin
     with Ticks[pi] do
     begin
       tmpx:=TimelinePosToPixelPos(Position);
+      if tmpx<tll then continue;
+      if tmpx>tlr then continue;
       Canvas.Line(tmpx,tlt-8,tmpx,tlt);
-      if pi<>FTicks.Count-1 then Canvas.TextRect(SegmentToRect(Segments[pi]),TimelinePosToPixelPos(Position),FBoundary,Caption,FTickCaptionStyle)
-      else Canvas.TextOut(TimelinePosToPixelPos(Position),FBoundary,Caption);
+      if pi<>FTicks.Count-1 then
+        Canvas.TextRect(SegmentToRect(Segments[pi]),tmpx,FBoundary,Caption,FTickCaptionStyle)
+      else
+        Canvas.TextOut(tmpx,FBoundary,Caption);
     end;
   end;
   Canvas.TextOut(Width-FBoundary-FRightBound,Height-FBoundary-16,millisec_to_format(FCursorPos));
@@ -212,7 +240,7 @@ begin
   Canvas.Pen.Color:=clRed;
   Canvas.Pen.Width:=2;
   tmpx:=TimelinePosToPixelPos(FCursorPos);
-  Canvas.Line(tmpx,tlt,tmpx,tlb-1);
+  if (tmpx>=tll) and (tmpx<=tlr) then Canvas.Line(tmpx,tlt,tmpx,tlb-1);
 
 end;
 
@@ -255,6 +283,29 @@ begin
   Inherited MouseMove(Shift,X,Y);
 end;
 
+procedure TTimelineToggle.MouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+var select_timepos:TTimelineTickPos;
+    prev,next:longint;
+begin
+  select_timepos:=PixelPosToTimelinePos(MousePos.x);
+  prev:=select_timepos-FDisplayMin;
+  next:=FDisplayMax-select_timepos;
+  if WheelDelta>0 then begin
+    if FDisplayMax - FDisplayMin < 200 then exit;
+    prev:=round(prev*0.8);
+    next:=round(next*0.8);
+  end else begin
+    prev:=round(prev*1.25);
+    next:=round(next*1.25);
+  end;
+  prev:=select_timepos - prev;
+  next:=select_timepos + next;
+  if prev<=FMin then FDisplayMin:=FMin else FDisplayMin:=prev;
+  if next>=FMax then FDisplayMax:=FMax else FDisplayMax:=next;
+  Paint;
+end;
+
 constructor TTimelineToggle.Create(AOwner:TComponent);
 var tmpTick1,tmpTick2:TTimelineToggleTick;
     tmpSegment:TTimelineToggleSegment;
@@ -294,6 +345,9 @@ begin
   tmpSegment.Right:=tmpTick2;
   tmpSegment.Enabled:=false;
   FSegments.Add(tmpSegment);
+
+  Self.OnMouseWheel:=@MouseWheel;
+
 end;
 
 destructor TTimelineToggle.Destroy;
@@ -419,6 +473,7 @@ procedure TTimelineToggle.SetMin(value:TTimelineTickPos);
 begin
   if FSegments.Count<>1 then raise Exception.Create('Segment数量不为1，不能修改边界值。');
   FMin:=value;
+  FDisplayMin:=value;
   Segments[0].Left.Position:=value;
   Segments[0].Left.Caption:=millisec_to_format(value);
 end;
@@ -427,13 +482,16 @@ procedure TTimelineToggle.SetMax(value:TTimelineTickPos);
 begin
   if FSegments.Count<>1 then raise Exception.Create('Segment数量不为1，不能修改边界值。');
   FMax:=value;
+  FDisplayMax:=value;
   Segments[0].Right.Position:=value;
   Segments[0].Right.Caption:=millisec_to_format(value);
 end;
 
 procedure TTimelineToggle.SetCursorPos(value:TTimelineTickPos);
+var step,prev,next,nmax,nmin:integer;
 begin
   if (FCursorPos>FMax) or (FCursorPos<FMin) then raise Exception.Create('CursorPos值超出边界值。');
+  //计划加上播放时的范围平移
   FCursorPos:=value;
   Paint;
 end;
@@ -450,6 +508,7 @@ var seg:TTimelineToggleSegment;
     thumb_pos:TTimelineTickPos;
     batch_lines:TStringlist;
 
+
 begin
   batch_lines:=TStringlist.Create;
   try
@@ -463,11 +522,11 @@ begin
       seg:=TTimelineToggleSegment(FSegments.Items[pi]);
       if seg.Enabled then begin
         if thumb_pos<0 then thumb_pos:=seg.Left.Position;
-        cmd:=' -y -i "'+FInputName+'" -ss ';
-        cmd:=cmd+millisec_to_format(seg.Left.Position);
-        cmd:=cmd+' -to ';
-        cmd:=cmd+millisec_to_format(seg.Right.Position);
-        cmd:=cmd+' OutTemp_'+IntToStr(ts)+'.ts';
+        cmd:=' -y';
+        cmd:=cmd+' -ss '+millisec_to_format(seg.Left.Position);
+        cmd:=cmd+' -to '+millisec_to_format(seg.Right.Position);
+        cmd:=cmd+' -i "'+FInputName+'"';
+        cmd:=cmd+' -c copy OutTemp_'+IntToStr(ts)+'.ts';
         batch_lines.add('.\ffmpeg.exe '+cmd);
         inc(ts);
       end;
@@ -476,7 +535,7 @@ begin
     if ts=0 then exit;
 
     //thumbnail
-    batch_lines.add('.\ffmpeg.exe -y -i "'+FInputName+'" -ss '+millisec_to_format(thumb_pos)+' -vframes 1 OutTemp_Thumb.png');
+    batch_lines.add('.\ffmpeg.exe -y -ss '+millisec_to_format(thumb_pos)+' -i "'+FInputName+'" -vframes 1 OutTemp_Thumb.png');
 
     //concat
     cmd:='concat:OutTemp_0.ts';

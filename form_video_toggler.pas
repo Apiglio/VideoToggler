@@ -60,6 +60,7 @@ end;
 
 procedure TForm_VideoToggler.FormDestroy(Sender: TObject);
 begin
+  PasLibVlcPlayer_Preview.Stop;
   TimelineToggle.Free;
 end;
 
