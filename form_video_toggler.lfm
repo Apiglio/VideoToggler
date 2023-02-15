@@ -113,7 +113,7 @@ object Form_VideoToggler: TForm_VideoToggler
     Width = 160
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Bottom = 4
-    Caption = '执行切分'
+    Caption = '导出视频'
     OnClick = Button_RunClick
     TabOrder = 5
   end

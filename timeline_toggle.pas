@@ -7,7 +7,7 @@ unit timeline_toggle;
 interface
 
 uses
-  Classes, SysUtils, Controls, ExtCtrls, Graphics, Windows, Dialogs, LazUTF8;
+  Classes, SysUtils, Controls, ExtCtrls, Menus, Graphics, Windows, Dialogs, LazUTF8;
 
 type
 
@@ -22,9 +22,12 @@ type
 
   TTimelineToggleSegment = class
     Enabled:boolean;
+    Speed:double;
     Left,Right:TTimelineToggleTick;
   public
     procedure XorEnabled;{$ifndef test_mode}inline;{$endif}
+  public
+    constructor Create;
   end;
 
   TTimelineToggle = class(TPanel)
@@ -34,6 +37,7 @@ type
     FTicks:TList;
     FSegments:TList;
     FCursorPos:TTimelineTickPos;
+    FCursorPosPicked:TTimelineTickPos;//在鼠标事件中用于存储临时的游标
 
     FBoundary:Integer;//边界像素大小
     FTimeLineTop:Integer;//时间轴区域上缘的坐标
@@ -42,6 +46,13 @@ type
     FDisabledColor:TColor;//禁用区段的时间轴颜色
     FTickCaptionStyle:TTextStyle;//时间标记的对齐方式等
 
+  private
+    FRightButtonMenu:TPopupMenu;//右键菜单
+    procedure PopupClick_XOR_SEGMENT(Sender:TObject);
+    procedure PopupClick_ADD_TICK(Sender:TObject);
+    procedure PopupClick_DEL_LTICK(Sender:TObject);
+    procedure PopupClick_DEL_RTICK(Sender:TObject);
+    procedure PopupClick_EDIT_SPEED(Sender:TObject);
 
   private
     function TimelinePosToPixelPos(Timeline:TTimelineTickPos):Integer;{$ifndef test_mode}inline;{$endif}
@@ -62,7 +73,8 @@ type
 
   public
     function AddTick(position:TTimelineTickPos):integer;
-    procedure DelTick(Index:Integer);
+    function DelTick(Index:Integer;left_merge:boolean):boolean;
+    function DelTick(tick:TTimelineToggleTick;left_merge:boolean):boolean;
 
   public
     procedure AddTickAtCursorPos;
@@ -79,6 +91,9 @@ type
     property Ticks[Index:Integer]:TTimelineToggleTick read GetTick;
     property Segments[Index:Integer]:TTimelineToggleSegment read GetSegment;default;
     property CursorPos:TTimelineTickPos read FCursorPos write SetCursorPos;
+  public
+    function ValidCursor(cursor_pos:TTimelineTickPos):boolean;
+
   private
     FOnUserChangeCursorPos:TTimelineCursorChangeEvent;
   public
@@ -129,7 +144,87 @@ begin
   Enabled:=not Enabled;
 end;
 
+constructor TTimelineToggleSegment.Create;
+begin
+  inherited Create;
+  Speed:=1.0;
+  Enabled:=true;
+end;
+
+
 { TTimelineToggle }
+
+
+procedure TTimelineToggle.PopupClick_XOR_SEGMENT(Sender:TObject);
+var tmpSegment:TTimelineToggleSegment;
+begin
+  with ((Sender as TMenuItem).Owner as TPopupMenu).Owner do
+  begin
+    tmpSegment:=TimelinePosToSegment(FCursorPosPicked);
+    if tmpSegment<>nil then tmpSegment.XorEnabled;
+    Paint;
+  end;
+end;
+
+procedure TTimelineToggle.PopupClick_ADD_Tick(Sender:TObject);
+begin
+  with ((Sender as TMenuItem).Owner as TPopupMenu).Owner do
+  begin
+    AddTick(FCursorPosPicked);
+    Paint;
+  end;
+end;
+
+procedure TTimelineToggle.PopupClick_DEL_LTick(Sender:TObject);
+var tmpSegment:TTimelineToggleSegment;
+begin
+  with ((Sender as TMenuItem).Owner as TPopupMenu).Owner do
+  begin
+    tmpSegment:=TimelinePosToSegment(FCursorPosPicked);
+    if tmpSegment<>nil then
+    begin
+      DelTick(tmpSegment.Left,false);
+      Paint;
+    end;
+  end;
+end;
+
+procedure TTimelineToggle.PopupClick_DEL_RTick(Sender:TObject);
+var tmpSegment:TTimelineToggleSegment;
+begin
+  with ((Sender as TMenuItem).Owner as TPopupMenu).Owner do
+  begin
+    tmpSegment:=TimelinePosToSegment(FCursorPosPicked);
+    if tmpSegment<>nil then
+    begin
+      DelTick(tmpSegment.Right,true);
+      Paint;
+    end;
+  end;
+end;
+
+procedure TTimelineToggle.PopupClick_EDIT_SPEED(Sender:TObject);
+var tmpSegment:TTimelineToggleSegment;
+    stmp:string;
+    dtmp:double;
+begin
+  with ((Sender as TMenuItem).Owner as TPopupMenu).Owner do
+  begin
+    tmpSegment:=TimelinePosToSegment(FCursorPosPicked);
+    if tmpSegment<>nil then
+    begin
+      stmp:=InputBox('速度：','修改片段速度',FloatToStrF(tmpSegment.Speed,ffFixed,5,8));
+      try
+        dtmp:=StrToFloat(stmp);
+        tmpSegment.Speed:=dtmp;
+      except
+        ShowMessage('错误的速度格式！');
+      end;
+    end;
+    Paint;
+  end;
+end;
+
 
 function TTimelineToggle.TimelinePosToPixelPos(Timeline:TTimelineTickPos):Integer;
 begin
@@ -154,13 +249,15 @@ end;
 function TTimelineToggle.TimelinePosToSegment(Timeline:TTimelineTickPos):TTimelineToggleSegment;
 var pi:integer;
 begin
+  result:=nil;
   pi:=0;
   while pi<FTicks.Count do
   begin
-    if Timeline=Ticks[pi].Position then begin result:=nil;exit end;
+    if Timeline=Ticks[pi].Position then exit;
     if Timeline<Ticks[pi].Position then break;
     inc(pi);
   end;
+  if pi>=FTicks.Count then exit;
   result:=Segments[pi-1];
 end;
 
@@ -245,41 +342,34 @@ begin
 end;
 
 procedure TTimelineToggle.MouseDown(Button:TMouseButton;Shift:TShiftState;X,Y:Integer);
-var cur:TTimelineTickPos;
 begin
   if not (ssLeft in Shift) then exit;
-  cur:=PixelPosToTimelinePos(X);
-  if (cur>=FMin) and (cur<=FMax) then SetCursorPos(cur);
-  if FOnUserChangeCursorPos<>nil then FOnUserChangeCursorPos(cur);
+  FCursorPosPicked:=PixelPosToTimelinePos(X);
+  if ValidCursor(FCursorPosPicked) then SetCursorPos(FCursorPosPicked);
+  if FOnUserChangeCursorPos<>nil then FOnUserChangeCursorPos(FCursorPosPicked);
   Inherited MouseDown(Button,Shift,X,Y);
 end;
 
 procedure TTimelineToggle.MouseUp(Button:TMouseButton;Shift:TShiftState;X,Y:Integer);
-var cur:TTimelineTickPos;
-    tmpSegment:TTimelineToggleSegment;
 begin
+  FCursorPosPicked:=PixelPosToTimelinePos(X);
+  if not ValidCursor(FCursorPosPicked) then exit;
   if Button=mbLeft then begin
-    cur:=PixelPosToTimelinePos(X);
-    if (cur>=FMin) and (cur<=FMax) then SetCursorPos(cur);
-    if FOnUserChangeCursorPos<>nil then FOnUserChangeCursorPos(cur);
+    SetCursorPos(FCursorPosPicked);
+    if FOnUserChangeCursorPos<>nil then FOnUserChangeCursorPos(FCursorPosPicked);
   end;
   if Button=mbRight then begin
-    cur:=PixelPosToTimelinePos(X);
-    tmpSegment:=nil;
-    if (cur>=FMin) and (cur<=FMax) then tmpSegment:=TimelinePosToSegment(cur);
-    if tmpSegment<>nil then tmpSegment.XorEnabled;
-    Paint;
+    FRightButtonMenu.PopUp;
   end;
   Inherited MouseUp(Button,Shift,X,Y);
 end;
 
 procedure TTimelineToggle.MouseMove(Shift: TShiftState; X, Y: Integer);
-var cur:TTimelineTickPos;
 begin
   if not (ssLeft in Shift) then exit;
-  cur:=PixelPosToTimelinePos(X);
-  if (cur>=FMin) and (cur<=FMax) then SetCursorPos(cur);
-  if FOnUserChangeCursorPos<>nil then FOnUserChangeCursorPos(cur);
+  FCursorPosPicked:=PixelPosToTimelinePos(X);
+  if ValidCursor(FCursorPosPicked) then SetCursorPos(FCursorPosPicked);
+  if FOnUserChangeCursorPos<>nil then FOnUserChangeCursorPos(FCursorPosPicked);
   Inherited MouseMove(Shift,X,Y);
 end;
 
@@ -309,8 +399,56 @@ end;
 constructor TTimelineToggle.Create(AOwner:TComponent);
 var tmpTick1,tmpTick2:TTimelineToggleTick;
     tmpSegment:TTimelineToggleSegment;
+    tmpMenuItem:TMenuItem;
 begin
   inherited Create(AOwner);
+
+  FRightButtonMenu:=TPopupMenu.Create(Self);
+  FRightButtonMenu.Parent:=Self;
+  FRightButtonMenu.PopupComponent:=Self;
+
+  tmpMenuItem:=TMenuItem.create(FRightButtonMenu);
+  tmpMenuItem.Caption:='禁用/启用';
+  tmpMenuItem.Enabled:=true;
+  tmpMenuItem.OnClick:=@PopupClick_XOR_SEGMENT;
+  FRightButtonMenu.Items.Add(tmpMenuItem);
+
+  tmpMenuItem:=TMenuItem.create(FRightButtonMenu);
+  tmpMenuItem.Caption:='-';
+  tmpMenuItem.Enabled:=false;
+  tmpMenuItem.OnClick:=nil;
+  FRightButtonMenu.Items.Add(tmpMenuItem);
+
+  tmpMenuItem:=TMenuItem.create(FRightButtonMenu);
+  tmpMenuItem.Caption:='添加断点';
+  tmpMenuItem.Enabled:=true;
+  tmpMenuItem.OnClick:=@PopupClick_ADD_TICK;
+  FRightButtonMenu.Items.Add(tmpMenuItem);
+
+  tmpMenuItem:=TMenuItem.create(FRightButtonMenu);
+  tmpMenuItem.Caption:='移除左断点';
+  tmpMenuItem.Enabled:=true;
+  tmpMenuItem.OnClick:=@PopupClick_DEL_LTICK;
+  FRightButtonMenu.Items.Add(tmpMenuItem);
+
+  tmpMenuItem:=TMenuItem.create(FRightButtonMenu);
+  tmpMenuItem.Caption:='移除右断点';
+  tmpMenuItem.Enabled:=true;
+  tmpMenuItem.OnClick:=@PopupClick_DEL_RTICK;
+  FRightButtonMenu.Items.Add(tmpMenuItem);
+
+  tmpMenuItem:=TMenuItem.create(FRightButtonMenu);
+  tmpMenuItem.Caption:='-';
+  tmpMenuItem.Enabled:=false;
+  tmpMenuItem.OnClick:=nil;
+  FRightButtonMenu.Items.Add(tmpMenuItem);
+
+  tmpMenuItem:=TMenuItem.create(FRightButtonMenu);
+  tmpMenuItem.Caption:='片段速度';
+  tmpMenuItem.Enabled:=true;
+  tmpMenuItem.OnClick:=@PopupClick_EDIT_SPEED;
+  FRightButtonMenu.Items.Add(tmpMenuItem);
+
 
   FOnUserChangeCursorPos:=nil;
 
@@ -343,7 +481,6 @@ begin
   tmpSegment:=TTimelineToggleSegment.Create;
   tmpSegment.Left:=tmpTick1;
   tmpSegment.Right:=tmpTick2;
-  tmpSegment.Enabled:=false;
   FSegments.Add(tmpSegment);
 
   Self.OnMouseWheel:=@MouseWheel;
@@ -397,7 +534,6 @@ begin
   seg:=TTimelineToggleSegment.Create;
   seg.Left:=tick;
   seg.Right:=tick2;
-  seg.Enabled:=false;
   FSegments.Add(seg);
 
 end;
@@ -447,8 +583,35 @@ begin
   Paint;
 end;
 
-procedure TTimelineToggle.DelTick(Index:Integer);
+function TTimelineToggle.DelTick(Index:Integer;left_merge:boolean):boolean;
+var seg_1,seg_2:TTimelineToggleSegment;
+    tick:TTimelineToggleTick;
 begin
+  result:=false;
+  if Index<=0 then exit;
+  if Index>=FTicks.Count-1 then exit;
+  tick:=TTimelineToggleTick(FTicks.Items[Index]);
+  seg_1:=TTimelineToggleSegment(FSegments.Items[Index-1]);
+  seg_2:=TTimelineToggleSegment(FSegments.Items[Index]);
+  if left_merge then
+  begin
+    seg_1.Right:=seg_2.Right;
+    FSegments.Delete(Index);
+    seg_2.Free;
+  end else begin
+    seg_2.Left:=seg_1.Left;
+    FSegments.Delete(Index-1);
+    seg_1.Free;
+  end;
+  FTicks.Delete(Index);
+  tick.Free;
+  Paint;
+  result:=true;
+end;
+
+function TTimelineToggle.DelTick(tick:TTimelineToggleTick;left_merge:boolean):boolean;
+begin
+  DelTick(FTicks.IndexOf(tick),left_merge);
 
 end;
 
@@ -496,6 +659,10 @@ begin
   Paint;
 end;
 
+function TTimelineToggle.ValidCursor(cursor_pos:TTimelineTickPos):boolean;
+begin
+  result:=(cursor_pos>=FMin) and (cursor_pos<=FMax);
+end;
 
 //.\ffmpeg.exe -i foochow.mp4 -ss 00:00:00 -vframes 1 out.png
 //.\ffmpeg -i foochow.mp4 -i out.png -map 0 -map 1 -c copy -c:v:1 png -disposition:v:1 attached_pic test.mp4
