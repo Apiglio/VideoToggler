@@ -77,6 +77,8 @@ type
     function AddTick(position:TTimelineTickPos):integer;
     function DelTick(Index:Integer;left_merge:boolean):boolean;
     function DelTick(tick:TTimelineToggleTick;left_merge:boolean):boolean;
+    function DelMinSegment:boolean;
+    function DelMaxSegment:boolean;
 
   public
     procedure AddTickAtCursorPos;
@@ -93,6 +95,7 @@ type
     property Ticks[Index:Integer]:TTimelineToggleTick read GetTick;
     property Segments[Index:Integer]:TTimelineToggleSegment read GetSegment;default;
     property CursorPos:TTimelineTickPos read FCursorPos write SetCursorPos;
+
   public
     function Valid:boolean;
     function ValidCursor(cursor_pos:TTimelineTickPos):boolean;
@@ -638,6 +641,41 @@ begin
 
 end;
 
+function TTimelineToggle.DelMinSegment:boolean;
+var tmpSegment:TTimelineToggleSegment;
+    tmpTick:TTimelineToggleTick;
+begin
+  result:=false;
+  if FSegments.Count<2 then exit;
+  tmpTick:=TTimelineToggleTick(FTicks[0]);
+  tmpSegment:=TTimelineToggleSegment(FSegments[0]);
+  FSegments.Delete(0);
+  FTicks.Delete(0);
+  tmpSegment.Free;
+  tmpTick.Free;
+  FMin:=TTimelineToggleTick(FTicks[0]).Position;
+  result:=true;
+end;
+
+function TTimelineToggle.DelMaxSegment:boolean;
+var tmpSegment:TTimelineToggleSegment;
+    tmpTick:TTimelineToggleTick;
+    tick_index,segment_index:integer;
+begin
+  result:=false;
+  if FSegments.Count<2 then exit;
+  tick_index:=FTicks.Count-1;
+  segment_index:=FSegments.Count-1;
+  tmpTick:=TTimelineToggleTick(FTicks[tick_index]);
+  tmpSegment:=TTimelineToggleSegment(FSegments[segment_index]);
+  FSegments.Delete(segment_index);
+  FTicks.Delete(tick_index);
+  tmpSegment.Free;
+  tmpTick.Free;
+  FMax:=TTimelineToggleTick(FTicks[tick_index-1]).Position;
+  result:=true;
+end;
+
 procedure TTimelineToggle.AddTickAtCursorPos;
 begin
   AddTick(FCursorPos);
@@ -665,26 +703,42 @@ end;
 
 procedure TTimelineToggle.SetMin(value:TTimelineTickPos);
 begin
-  if FSegments.Count<>1 then raise Exception.Create('Segment数量不为1，不能修改边界值。');
-  FMin:=value;
-  FDisplayMin:=value;
-  Segments[0].Left.Position:=value;
-  Segments[0].Left.Caption:=millisec_to_format(value);
+  if value < Segments[0].Right.Position then begin
+    FMin:=value;
+    FDisplayMin:=value;
+    Segments[0].Left.Position:=value;
+    Segments[0].Left.Caption:=millisec_to_format(value);
+  end else if value >= FMax then begin
+    Clear;
+  end else begin
+    AddTick(value);
+    while Segments[0].Left.Position<value do DelMaxSegment;
+    FMin:=value;
+    FDisplayMin:=value;
+  end;
 end;
 
 procedure TTimelineToggle.SetMax(value:TTimelineTickPos);
 begin
-  if FSegments.Count<>1 then raise Exception.Create('Segment数量不为1，不能修改边界值。');
-  FMax:=value;
-  FDisplayMax:=value;
-  Segments[0].Right.Position:=value;
-  Segments[0].Right.Caption:=millisec_to_format(value);
+  if value > Segments[-1].Left.Position then begin
+    FMax:=value;
+    FDisplayMax:=value;
+    Segments[-1].Right.Position:=value;
+    Segments[-1].Right.Caption:=millisec_to_format(value);
+  end else if value <= FMin then begin
+    Clear;
+  end else begin
+    AddTick(value);
+    while Segments[-1].Right.Position>value do DelMaxSegment;
+    FMax:=value;
+    FDisplayMax:=value;
+  end;
 end;
 
 procedure TTimelineToggle.SetCursorPos(value:TTimelineTickPos);
 var step,prev,next,nmax,nmin:integer;
 begin
-  if (FCursorPos>FMax) or (FCursorPos<FMin) then raise Exception.Create('CursorPos值超出边界值。');
+  if (value>FMax) or (value<FMin) then raise Exception.Create('CursorPos值超出边界值。');
   //计划加上播放时的范围平移
   FCursorPos:=value;
   Paint;
