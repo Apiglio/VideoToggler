@@ -52,8 +52,8 @@ begin
   TimelineToggle:=TTimelineToggle.Create(GroupBox_TimelineToggle);
   TimelineToggle.Parent:=GroupBox_TimelineToggle;
   TimelineToggle.Align:=alClient;
-  TimelineToggle.MinPosition:=0;
-  TimelineToggle.MaxPosition:=7200000;
+  //TimelineToggle.MinPosition:=0;
+  //TimelineToggle.MaxPosition:=7200000;
   TimelineToggle.OnUserChangeCursorPos:=@UserChangeCursorPos;
   TimelineToggle.InputName:=UTF8ToWinCP(Edit_VideoFileName.Caption);
 end;

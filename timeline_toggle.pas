@@ -277,6 +277,8 @@ begin
   tll:=Self.FBoundary;
   tlr:=Self.Width-FBoundary-FRightBound;
 
+  if FMax<=FMin then exit;
+
   //segments
   Canvas.Brush.Style:=bsSolid;
   Canvas.Brush.Color:=clForm;
@@ -465,7 +467,7 @@ begin
   end;
 
   FMin:=0;
-  FMax:=100;
+  FMax:=0;
   FCursor:=0;
 
   FTicks:=TList.Create;
@@ -664,6 +666,25 @@ begin
   result:=(cursor_pos>=FMin) and (cursor_pos<=FMax);
 end;
 
+function arg_atempo(multiply:double):string;
+var dtmp:double;
+begin
+  if multiply<=0 then exit;
+  dtmp:=multiply;
+  result:=' -af "';
+  while dtmp>2 do
+  begin
+    result:=result+'atempo=2.0,';
+    dtmp:=dtmp/2;
+  end;
+  while dtmp<0.5 do
+  begin
+    result:=result+'atempo=0.5,';
+    dtmp:=dtmp*2;
+  end;
+  result:=result+'atempo='+FloatToStrF(dtmp,ffFixed,3,8)+'"';
+end;
+
 //.\ffmpeg.exe -i foochow.mp4 -ss 00:00:00 -vframes 1 out.png
 //.\ffmpeg -i foochow.mp4 -i out.png -map 0 -map 1 -c copy -c:v:1 png -disposition:v:1 attached_pic test.mp4
 //.\ffmpeg.exe -y -i Foochow.mp4 -ss 0:0:15 -to 0:0:17 out3.ts
@@ -689,11 +710,18 @@ begin
       seg:=TTimelineToggleSegment(FSegments.Items[pi]);
       if seg.Enabled then begin
         if thumb_pos<0 then thumb_pos:=seg.Left.Position;
-        cmd:=' -y';
+        cmd:='-y';
         cmd:=cmd+' -ss '+millisec_to_format(seg.Left.Position);
         cmd:=cmd+' -to '+millisec_to_format(seg.Right.Position);
+        //cmd:=cmd+' -t '+millisec_to_format(round((seg.Right.Position-seg.Left.Position)/seg.Speed));
         cmd:=cmd+' -i "'+FInputName+'"';
-        cmd:=cmd+' -c copy OutTemp_'+IntToStr(ts)+'.ts';
+        if seg.Speed<>1.0 then begin
+          cmd:=cmd+' -vf "setpts='+FloatToStrF(1.0/seg.Speed,ffFixed,3,8)+'*PTS"';
+          cmd:=cmd+arg_atempo(seg.Speed);
+        end else begin
+          cmd:=cmd+' -c copy';
+        end;
+        cmd:=cmd+' OutTemp_'+IntToStr(ts)+'.ts';
         batch_lines.add('.\ffmpeg.exe '+cmd);
         inc(ts);
       end;
