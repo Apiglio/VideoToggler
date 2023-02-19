@@ -13,6 +13,7 @@ type
 
   TTimelineTickPos = Integer;
   TTimelineCursorChangeEvent = procedure(ACursorPos:TTimelineTickPos) of object;
+  TTimelineZoneEvent = procedure(ADispMin,ADispMax:TTimelineTickPos) of object;
 
   TTimelineToggleTick = class
   public
@@ -38,6 +39,7 @@ type
     FSegments:TList;
     FCursorPos:TTimelineTickPos;
     FCursorPosPicked:TTimelineTickPos;//在鼠标事件中用于存储临时的游标
+    FEditable:boolean;//是否可以通过用户操作修改时间轴
 
     FBoundary:Integer;//边界像素大小
     FTimeLineTop:Integer;//时间轴区域上缘的坐标
@@ -92,12 +94,19 @@ type
     property Segments[Index:Integer]:TTimelineToggleSegment read GetSegment;default;
     property CursorPos:TTimelineTickPos read FCursorPos write SetCursorPos;
   public
+    function Valid:boolean;
     function ValidCursor(cursor_pos:TTimelineTickPos):boolean;
+    property Editable:boolean read FEditable write FEditable;
 
   private
     FOnUserChangeCursorPos:TTimelineCursorChangeEvent;
+    FOnUserZone:TTimelineZoneEvent;
   public
+    procedure Refresh;
+    function Zone(ADispMin,ADispMax:TTimelineTickPos):boolean;
+    procedure ZoneToWorld;
     property OnUserChangeCursorPos:TTimelineCursorChangeEvent read FOnUserChangeCursorPos write FOnUserChangeCursorPos;
+    property OnUserZone:TTimelineZoneEvent read FOnUserZone write FOnUserZone;
 
   //对接视频剪辑的部分
   private
@@ -127,8 +136,14 @@ end;
 function millisec_to_format(ms:integer):string;
 var a,b:integer;
 begin
-  a:=ms;
-  result:=zfill(a div 3600000,1);
+  if ms>=0 then begin
+    result:='';
+    a:=ms;
+  end else begin
+    result:='-';
+    a:=-ms;
+  end;
+  result:=result+zfill(a div 3600000,1);
   a:=a mod 3600000;
   result:=result+':'+zfill(a div 60000,2);
   a:=a mod 60000;
@@ -277,7 +292,7 @@ begin
   tll:=Self.FBoundary;
   tlr:=Self.Width-FBoundary-FRightBound;
 
-  if FMax<=FMin then exit;
+  if not Valid then exit;
 
   //segments
   Canvas.Brush.Style:=bsSolid;
@@ -345,6 +360,7 @@ end;
 
 procedure TTimelineToggle.MouseDown(Button:TMouseButton;Shift:TShiftState;X,Y:Integer);
 begin
+  if not Valid then exit;
   if not (ssLeft in Shift) then exit;
   FCursorPosPicked:=PixelPosToTimelinePos(X);
   if ValidCursor(FCursorPosPicked) then SetCursorPos(FCursorPosPicked);
@@ -354,6 +370,7 @@ end;
 
 procedure TTimelineToggle.MouseUp(Button:TMouseButton;Shift:TShiftState;X,Y:Integer);
 begin
+  if not Valid then exit;
   FCursorPosPicked:=PixelPosToTimelinePos(X);
   if not ValidCursor(FCursorPosPicked) then exit;
   if Button=mbLeft then begin
@@ -361,13 +378,14 @@ begin
     if FOnUserChangeCursorPos<>nil then FOnUserChangeCursorPos(FCursorPosPicked);
   end;
   if Button=mbRight then begin
-    FRightButtonMenu.PopUp;
+    if FEditable then FRightButtonMenu.PopUp;
   end;
   Inherited MouseUp(Button,Shift,X,Y);
 end;
 
 procedure TTimelineToggle.MouseMove(Shift: TShiftState; X, Y: Integer);
 begin
+  if not Valid then exit;
   if not (ssLeft in Shift) then exit;
   FCursorPosPicked:=PixelPosToTimelinePos(X);
   if ValidCursor(FCursorPosPicked) then SetCursorPos(FCursorPosPicked);
@@ -380,6 +398,7 @@ procedure TTimelineToggle.MouseWheel(Sender: TObject; Shift: TShiftState;
 var select_timepos:TTimelineTickPos;
     prev,next:longint;
 begin
+  if not Valid then exit;
   select_timepos:=PixelPosToTimelinePos(MousePos.x);
   prev:=select_timepos-FDisplayMin;
   next:=FDisplayMax-select_timepos;
@@ -395,6 +414,7 @@ begin
   next:=select_timepos + next;
   if prev<=FMin then FDisplayMin:=FMin else FDisplayMin:=prev;
   if next>=FMax then FDisplayMax:=FMax else FDisplayMax:=next;
+  if FOnUserZone<>nil then FOnUserZone(FDisplayMin,FDisplayMax);
   Paint;
 end;
 
@@ -486,6 +506,7 @@ begin
   FSegments.Add(tmpSegment);
 
   Self.OnMouseWheel:=@MouseWheel;
+  FEditable:=true;
 
 end;
 
@@ -520,7 +541,7 @@ begin
   end;
 
   FMin:=0;
-  FMax:=100;
+  FMax:=0;
   FCursorPos:=0;
 
   FTicks:=TList.Create;
@@ -624,14 +645,22 @@ end;
 
 function TTimelineToggle.GetSegment(Index:Integer):TTimelineToggleSegment;
 begin
-  if (Index>=FSegments.Count) or (Index<0) then result:=nil
-  else result:=TTimelineToggleSegment(FSegments.Items[Index]);
+  result:=nil;
+  if (Index>=FSegments.Count) or (Index<-FSegments.Count) then exit;
+  if Index>=0 then
+    result:=TTimelineToggleSegment(FSegments.Items[Index])
+  else
+    result:=TTimelineToggleSegment(FSegments.Items[Index+FSegments.Count])
 end;
 
 function TTimelineToggle.GetTick(Index:Integer):TTimelineToggleTick;
 begin
-  if Index>=FTicks.Count then result:=nil
-  else result:=TTimelineToggleTick(FTicks.Items[Index]);
+  result:=nil;
+  if (Index>=FTicks.Count) or (Index<-FTicks.Count) then exit;
+  if Index>=0 then
+    result:=TTimelineToggleTick(FTicks.Items[Index])
+  else
+    result:=TTimelineToggleTick(FTicks.Items[Index+FTicks.Count]);
 end;
 
 procedure TTimelineToggle.SetMin(value:TTimelineTickPos);
@@ -661,9 +690,35 @@ begin
   Paint;
 end;
 
+function TTimelineToggle.Valid:boolean;
+begin
+  result:=FMax>FMin;
+end;
 function TTimelineToggle.ValidCursor(cursor_pos:TTimelineTickPos):boolean;
 begin
   result:=(cursor_pos>=FMin) and (cursor_pos<=FMax);
+end;
+
+procedure TTimelineToggle.Refresh;
+begin
+  if Valid then Paint;
+end;
+
+function TTimelineToggle.Zone(ADispMin,ADispMax:TTimelineTickPos):boolean;
+begin
+  if (FMin <= ADispMin) and (ADispMin < ADispMax) and (ADispMax <= FMax) then begin
+    FDisplayMin:=ADispMin;
+    FDisplayMax:=ADispMax;
+    Paint;
+    result:=true;
+  end else
+    result:=false;
+end;
+
+procedure TTimelineToggle.ZoneToWorld;
+begin
+  FDisplayMin:=FMin;
+  FDisplayMax:=FMax;
 end;
 
 function arg_atempo(multiply:double):string;
@@ -698,6 +753,8 @@ var seg:TTimelineToggleSegment;
 
 
 begin
+  if not Valid then exit;
+
   batch_lines:=TStringlist.Create;
   try
     batch_lines.add('setlocal');
