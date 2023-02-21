@@ -25,8 +25,14 @@ type
     Enabled:boolean;
     Speed:double;
     Left,Right:TTimelineToggleTick;
+    SubtitleText:string;
+  protected
+    procedure SetSubtitle(str:string);
+    function GetSubtitle:string;
   public
     procedure XorEnabled;{$ifndef test_mode}inline;{$endif}
+    function SrtText(srt_number:integer):string;
+    property Subtitle:string read GetSubtitle write SetSubtitle;
   public
     constructor Create;
   end;
@@ -47,7 +53,8 @@ type
     FEnabledColor:TColor;//启用区段的时间轴颜色
     FDisabledColor:TColor;//禁用区段的时间轴颜色
     FTickCaptionStyle:TTextStyle;//时间标记的对齐方式等
-
+  public
+    property Color:TColor read FEnabledColor write FEnabledColor;
   private
     FRightButtonMenu:TPopupMenu;//右键菜单
     procedure PopupClick_XOR_SEGMENT(Sender:TObject);
@@ -89,12 +96,17 @@ type
     procedure SetMin(value:TTimelineTickPos);
     procedure SetMax(value:TTimelineTickPos);
     procedure SetCursorPos(value:TTimelineTickPos);
+    function GetCursorSegment:TTimelineToggleSegment;
   public
+    function CountSegments:integer;
+    function CountTicks:integer;
+    function CountEnabled:integer;
     property MinPosition:TTimelineTickPos read FMin write SetMin;
     property MaxPosition:TTimelineTickPos read FMax write SetMax;
     property Ticks[Index:Integer]:TTimelineToggleTick read GetTick;
     property Segments[Index:Integer]:TTimelineToggleSegment read GetSegment;default;
     property CursorPos:TTimelineTickPos read FCursorPos write SetCursorPos;
+    property CursorSegment:TTimelineToggleSegment read GetCursorSegment;
 
   public
     function Valid:boolean;
@@ -122,6 +134,9 @@ type
     procedure Run;
 
   end;
+
+  function millisec_to_format(ms:integer):string;
+  function arg_atempo(multiply:double):string;
 
 implementation
 
@@ -160,6 +175,24 @@ end;
 procedure TTimelineToggleSegment.XorEnabled;
 begin
   Enabled:=not Enabled;
+end;
+
+procedure TTimelineToggleSegment.SetSubtitle(str:string);
+begin
+  SubtitleText:=str;
+end;
+
+function TTimelineToggleSegment.GetSubtitle:string;
+begin
+  result:=SubtitleText;
+end;
+
+function TTimelineToggleSegment.SrtText(srt_number:integer):string;
+begin
+  result:=IntToStr(srt_number)+#13#10;
+  result:=result+millisec_to_format(Left.Position)+' --> ';
+  result:=result+millisec_to_format(Right.Position)+#13#10;
+  result:=result+SubtitleText+#13#10+#13#10;
 end;
 
 constructor TTimelineToggleSegment.Create;
@@ -744,6 +777,42 @@ begin
   Paint;
 end;
 
+function TTimelineToggle.GetCursorSegment:TTimelineToggleSegment;
+var index:integer;
+    tmpSegment:TTimelineToggleSegment;
+begin
+  result:=nil;
+  if FCursorPos<=FMin then exit;
+  index:=0;
+  while index<FSegments.Count-1 do begin
+    tmpSegment:=TTimelineToggleSegment(FSegments[index]);
+    if tmpSegment.Right.Position>FCursorPos then begin
+      result:=tmpSegment;
+      exit;
+    end else if tmpSegment.Right.Position=FCursorPos then exit;
+    inc(index);
+  end;
+end;
+
+function TTimelineToggle.CountSegments:integer;
+begin
+  result:=FSegments.Count;
+end;
+
+function TTimelineToggle.CountEnabled:integer;
+var index:integer;
+begin
+  result:=0;
+  for index:=0 to FSegments.Count-1 do
+    if TTimelineToggleSegment(FSegments[index]).Enabled then
+      inc(result);
+end;
+
+function TTimelineToggle.CountTicks:integer;
+begin
+  result:=FTicks.Count;
+end;
+
 function TTimelineToggle.Valid:boolean;
 begin
   result:=FMax>FMin;
@@ -780,7 +849,7 @@ var dtmp:double;
 begin
   if multiply<=0 then exit;
   dtmp:=multiply;
-  result:=' -af "';
+  //result:=' -af "';
   while dtmp>2 do
   begin
     result:=result+'atempo=2.0,';
@@ -791,7 +860,7 @@ begin
     result:=result+'atempo=0.5,';
     dtmp:=dtmp*2;
   end;
-  result:=result+'atempo='+FloatToStrF(dtmp,ffFixed,3,8)+'"';
+  result:=result+'atempo='+FloatToStrF(dtmp,ffFixed,3,8){+'"'};
 end;
 
 //.\ffmpeg.exe -i foochow.mp4 -ss 00:00:00 -vframes 1 out.png
@@ -828,7 +897,7 @@ begin
         cmd:=cmd+' -i "'+FInputName+'"';
         if seg.Speed<>1.0 then begin
           cmd:=cmd+' -vf "setpts='+FloatToStrF(1.0/seg.Speed,ffFixed,3,8)+'*PTS"';
-          cmd:=cmd+arg_atempo(seg.Speed);
+          cmd:=cmd+' -af "'+arg_atempo(seg.Speed)+'"';
         end else begin
           cmd:=cmd+' -c copy';
         end;
