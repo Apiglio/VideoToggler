@@ -1,12 +1,12 @@
 object Form_VideoToggler: TForm_VideoToggler
-  Left = 1215
-  Height = 335
-  Top = 673
-  Width = 598
+  Left = 915
+  Height = 476
+  Top = 532
+  Width = 898
   AllowDropFiles = True
   Caption = 'Apiglio Video Toggler'
-  ClientHeight = 335
-  ClientWidth = 598
+  ClientHeight = 476
+  ClientWidth = 898
   Constraints.MinHeight = 240
   Constraints.MinWidth = 360
   DesignTimePPI = 144
@@ -24,8 +24,8 @@ object Form_VideoToggler: TForm_VideoToggler
     AnchorSideBottom.Side = asrBottom
     Left = 8
     Height = 84
-    Top = 243
-    Width = 582
+    Top = 384
+    Width = 882
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 8
     BorderSpacing.Top = 8
@@ -35,14 +35,16 @@ object Form_VideoToggler: TForm_VideoToggler
     TabOrder = 0
   end
   object Button_AddTick: TButton
+    AnchorSideTop.Control = PasLibVlcPlayer_Preview
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = GroupBox_TimelineToggle
-    Left = 430
+    Left = 730
     Height = 32
-    Top = 203
+    Top = 152
     Width = 160
-    Anchors = [akRight, akBottom]
+    Anchors = [akTop, akRight]
+    BorderSpacing.Top = 64
     BorderSpacing.Right = 8
     Caption = '添加断点'
     OnClick = Button_AddTickClick
@@ -55,9 +57,9 @@ object Form_VideoToggler: TForm_VideoToggler
     AnchorSideRight.Control = Button_AddTick
     AnchorSideBottom.Control = GroupBox_TimelineToggle
     Left = 8
-    Height = 147
+    Height = 288
     Top = 88
-    Width = 414
+    Width = 714
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 8
     BorderSpacing.Top = 8
@@ -74,13 +76,12 @@ object Form_VideoToggler: TForm_VideoToggler
     AnchorSideLeft.Control = Button_AddTick
     AnchorSideRight.Control = Button_AddTick
     AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = Button_AddTick
-    Left = 430
+    AnchorSideBottom.Control = GroupBox_TimelineToggle
+    Left = 730
     Height = 32
-    Top = 167
+    Top = 344
     Width = 160
     Anchors = [akLeft, akRight, akBottom]
-    BorderSpacing.Bottom = 4
     Caption = '播放 / 暂停/ 恢复'
     OnClick = Button_playClick
     TabOrder = 3
@@ -94,7 +95,7 @@ object Form_VideoToggler: TForm_VideoToggler
     Left = 106
     Height = 32
     Top = 8
-    Width = 316
+    Width = 616
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 8
     BorderSpacing.Top = 8
@@ -104,15 +105,16 @@ object Form_VideoToggler: TForm_VideoToggler
   end
   object Button_Run: TButton
     AnchorSideLeft.Control = Button_AddTick
+    AnchorSideTop.Control = Edit_VideoOutput
     AnchorSideRight.Control = Button_AddTick
     AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = Button_play
-    Left = 430
+    AnchorSideBottom.Control = Edit_VideoOutput
+    AnchorSideBottom.Side = asrBottom
+    Left = 730
     Height = 32
-    Top = 131
+    Top = 48
     Width = 160
-    Anchors = [akLeft, akRight, akBottom]
-    BorderSpacing.Bottom = 4
+    Anchors = [akTop, akLeft, akRight, akBottom]
     Caption = '导出视频'
     OnClick = Button_RunClick
     TabOrder = 5
@@ -127,7 +129,7 @@ object Form_VideoToggler: TForm_VideoToggler
     Left = 106
     Height = 32
     Top = 48
-    Width = 316
+    Width = 616
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 8
     BorderSpacing.Top = 8
@@ -156,5 +158,22 @@ object Form_VideoToggler: TForm_VideoToggler
     BorderSpacing.Left = 8
     Caption = '输出视频：'
     ParentColor = False
+  end
+  object Button_AddTag: TButton
+    AnchorSideTop.Control = Button_AddTick
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = GroupBox_TimelineToggle
+    Left = 730
+    Height = 32
+    Top = 188
+    Width = 160
+    Anchors = [akTop, akRight]
+    BorderSpacing.Top = 4
+    BorderSpacing.Right = 8
+    Caption = '确定为封面'
+    OnClick = Button_AddTagClick
+    TabOrder = 7
   end
 end

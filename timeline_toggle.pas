@@ -21,6 +21,10 @@ type
     Position:TTimelineTickPos;
   end;
 
+  TTimelineToggleTag = class(TTimelineToggleTick)
+    TypeString:string;
+  end;
+
   TTimelineToggleSegment = class
     Enabled:boolean;
     Speed:double;
@@ -46,6 +50,8 @@ type
     FCursorPos:TTimelineTickPos;
     FCursorPosPicked:TTimelineTickPos;//在鼠标事件中用于存储临时的游标
     FEditable:boolean;//是否可以通过用户操作修改时间轴
+
+    FTags:TList;//这个和Segment的分割点不同，是独立的标签，用于标记封面位置等信息
 
     FBoundary:Integer;//边界像素大小
     FTimeLineTop:Integer;//时间轴区域上缘的坐标
@@ -87,8 +93,12 @@ type
     function DelMinSegment:boolean;
     function DelMaxSegment:boolean;
 
+    function AddTag(position:TTimelineTickPos;aCaption,aTypeString:string):integer;
+
+
   public
     procedure AddTickAtCursorPos;
+    procedure AddTagAtCursorPos(aCaption,aTypeString:string);
 
   protected
     function GetTick(Index:Integer):TTimelineToggleTick;
@@ -316,6 +326,7 @@ procedure TTimelineToggle.Paint;
 var pi,tlt,tlb,tll,tlr,tmpx:integer;
     pos_l,pos_r:integer;
     first_tick,last_tick:integer;
+    tmpTag:TTimelineToggleTag;
 begin
   inherited Paint;
 
@@ -385,6 +396,20 @@ begin
     end;
   end;
   Canvas.TextOut(Width-FBoundary-FRightBound,Height-FBoundary-16,millisec_to_format(FCursorPos));
+
+  //tags
+  Canvas.Font.Color:=clBlack;
+  Canvas.Brush.Style:=bsClear;
+  Canvas.Pen.Width:=1;
+  for pi:=FTags.Count-1 downto 0 do begin
+    tmpTag:=TTimelineToggleTag(FTags.Items[pi]);
+    tmpx:=TimelinePosToPixelPos(TTimelineToggleTag(tmpTag).Position);
+    if (tmpx>=tll) and (tmpx<=tlr) then begin
+      Canvas.Line(tmpx,tlt,tmpx,tlb-Height div 3 -1);
+      Canvas.Ellipse(tmpx-2,tlt-6,tmpx+2,tlt-2);
+      Canvas.TextOut(tmpx,tlt+1,tmpTag.Caption);
+    end;
+  end;
 
   //cursor
   Canvas.Pen.Color:=clRed;
@@ -540,6 +565,13 @@ begin
   tmpSegment.Left:=tmpTick1;
   tmpSegment.Right:=tmpTick2;
   FSegments.Add(tmpSegment);
+
+  FTags:=TList.Create;
+  tmpTick1:=TTimelineToggleTag.Create;
+  tmpTick1.Position:=FMin;
+  tmpTick1.Caption:='封面';
+  TTimelineToggleTag(tmpTick1).TypeString:='cover';
+  FTags.Add(tmpTick1);
 
   Self.OnMouseWheel:=@MouseWheel;
   FEditable:=true;
@@ -709,9 +741,38 @@ begin
   result:=true;
 end;
 
+function TTimelineToggle.AddTag(position:TTimelineTickPos;aCaption,aTypeString:string):integer;
+var pi:integer;
+    tmpTag:TTimelineToggleTag;
+begin
+  pi:=0;
+  while pi<FTags.Count do
+  begin
+    tmpTag:=TTimelineToggleTag(FTags.Items[pi]);
+    if tmpTag.TypeString = aTypeString then begin
+      tmpTag.Position:=position;
+      tmpTag.Caption:=aCaption;
+      result:=pi;
+      exit;
+    end;
+    inc(pi);
+  end;
+  tmpTag:=TTimelineToggleTag.Create;
+  tmpTag.Position:=position;
+  tmpTag.Caption:=aCaption;
+  tmpTag.TypeString:=aTypeString;
+
+  result:=FTicks.Add(tmpTag);
+  Paint;
+end;
+
 procedure TTimelineToggle.AddTickAtCursorPos;
 begin
   AddTick(FCursorPos);
+end;
+procedure TTimelineToggle.AddTagAtCursorPos(aCaption,aTypeString:string);
+begin
+  AddTag(FCursorPos,aCaption,aTypeString);
 end;
 
 function TTimelineToggle.GetSegment(Index:Integer):TTimelineToggleSegment;
@@ -871,6 +932,7 @@ procedure TTimelineToggle.Run;
 var seg:TTimelineToggleSegment;
     pi,ts:integer;
     cmd:string;
+    tmpTag:TTimelineToggleTag;
     thumb_pos:TTimelineTickPos;
     batch_lines:TStringlist;
 
@@ -910,6 +972,10 @@ begin
     if ts=0 then exit;
 
     //thumbnail
+    for pi:=FTags.Count-1 downto 0 do begin
+      tmpTag:=TTimelineToggleTag(FTags.Items[pi]);
+      if tmpTag.TypeString='cover' then begin thumb_pos:=tmpTag.Position;break;end;
+    end;
     batch_lines.add('.\ffmpeg.exe -y -ss '+millisec_to_format(thumb_pos)+' -i "'+FInputName+'" -vframes 1 OutTemp_Thumb.png');
 
     //concat

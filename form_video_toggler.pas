@@ -14,6 +14,7 @@ type
 
   TForm_VideoToggler = class(TForm)
     Button_AddTick: TButton;
+    Button_AddTag: TButton;
     Button_Run: TButton;
     Button_play: TButton;
     Edit_VideoOutput: TEdit;
@@ -22,6 +23,7 @@ type
     Label_input: TLabel;
     Label_output: TLabel;
     PasLibVlcPlayer_Preview: TPasLibVlcPlayer;
+    procedure Button_AddTagClick(Sender: TObject);
     procedure Button_AddTickClick(Sender: TObject);
     procedure Button_playClick(Sender: TObject);
     procedure Button_RunClick(Sender: TObject);
@@ -87,7 +89,11 @@ procedure TForm_VideoToggler.PasLibVlcPlayer_PreviewMediaPlayerPositionChanged(
 var ms:int64;
 begin
   ms:=PasLibVlcPlayer_Preview.GetVideoPosInMs;
-  TimelineToggle.CursorPos:=ms;
+  try
+    TimelineToggle.CursorPos:=ms;
+  except
+    TimelineToggle.CursorPos:=TimelineToggle.MinPosition;
+  end;
   ms:=PasLibVlcPlayer_Preview.GetVideoLenInMs;
   if (ms<>0) and (TimelineToggle.MaxPosition<>ms) then TimelineToggle.MaxPosition:=ms;//MaxPosition为什么一开始为0？
 end;
@@ -95,6 +101,11 @@ end;
 procedure TForm_VideoToggler.Button_AddTickClick(Sender: TObject);
 begin
   TimelineToggle.AddTickAtCursorPos;
+end;
+
+procedure TForm_VideoToggler.Button_AddTagClick(Sender: TObject);
+begin
+  TimelineToggle.AddTagAtCursorPos('封面','cover');
 end;
 
 procedure TForm_VideoToggler.Button_playClick(Sender: TObject);
