@@ -137,11 +137,18 @@ type
   private
     FInputName:string;
     FOutputName:string;
+    FForceWidth:integer;
+    FForceHeight:integer;
+    FForceKBPS:integer;
   public
     property InputName:string read FInputName write FInputName;
     property OutputName:string read FOutputName write FOutputName;
+    property ForceWidth:integer read FForceWidth write FForceWidth;
+    property ForceHeight:integer read FForceHeight write FForceHeight;
+    property ForceKBPS:integer read FForceKBPS write FForceKBPS;
+
   public
-    procedure Run;
+    procedure Run(GenerateBatchOnly:boolean=false);
 
   end;
 
@@ -627,6 +634,10 @@ begin
   seg.Right:=tick2;
   FSegments.Add(seg);
 
+  FForceWidth:=0;
+  FForceHeight:=0;
+  FForceKBPS:=0;
+
 end;
 
 function TTimelineToggle.AddTick(position:TTimelineTickPos):integer;
@@ -928,14 +939,15 @@ end;
 //.\ffmpeg -i foochow.mp4 -i out.png -map 0 -map 1 -c copy -c:v:1 png -disposition:v:1 attached_pic test.mp4
 //.\ffmpeg.exe -y -i Foochow.mp4 -ss 0:0:15 -to 0:0:17 out3.ts
 //.\ffmpeg.exe -i "concat:out1.ts|out2.ts|out3.ts" -c copy output.mp4
-procedure TTimelineToggle.Run;
+procedure TTimelineToggle.Run(GenerateBatchOnly:boolean=false);
 var seg:TTimelineToggleSegment;
     pi,ts:integer;
     cmd:string;
     tmpTag:TTimelineToggleTag;
     thumb_pos:TTimelineTickPos;
     batch_lines:TStringlist;
-
+    cmd_vf,cmd_af:string;
+    len_vf,len_af:integer;
 
 begin
   if not Valid then exit;
@@ -957,12 +969,40 @@ begin
         cmd:=cmd+' -to '+millisec_to_format(seg.Right.Position);
         //cmd:=cmd+' -t '+millisec_to_format(round((seg.Right.Position-seg.Left.Position)/seg.Speed));
         cmd:=cmd+' -i "'+FInputName+'"';
+
+        if ForceKBPS>0 then cmd:=cmd+Format(' -b %dk',[ForceKBPS]);
+
+        cmd_af:='';
+        cmd_vf:='';
         if seg.Speed<>1.0 then begin
-          cmd:=cmd+' -vf "setpts='+FloatToStrF(1.0/seg.Speed,ffFixed,3,8)+'*PTS"';
-          cmd:=cmd+' -af "'+arg_atempo(seg.Speed)+'"';
-        end else begin
-          cmd:=cmd+' -c copy';
+          //cmd:=cmd+' -vf "setpts='+FloatToStrF(1.0/seg.Speed,ffFixed,3,8)+'*PTS"';
+          //cmd:=cmd+' -af "'+arg_atempo(seg.Speed)+'"';
+          cmd_vf:='setpts='+FloatToStrF(1.0/seg.Speed,ffFixed,3,8)+'*PTS';
+          cmd_af:=arg_atempo(seg.Speed);
         end;
+
+        if ForceWidth>0 then begin
+          if ForceHeight>0 then begin
+            cmd_vf:=cmd_vf+Format('scale=%d:%d,setdar=%d/%d',[ForceWidth,ForceHeight,ForceWidth,ForceHeight]);
+          end else begin
+            cmd_vf:=cmd_vf+Format('scale=%d:-1',[ForceWidth]);
+          end;
+        end else begin
+          if ForceHeight>0 then begin
+            cmd_vf:=cmd_vf+Format('scale=-1:%d',[ForceHeight]);
+          end else begin
+            //cmd_vf:=cmd_vf+'scale=iw*1:ih*1,';
+          end;
+        end;
+
+        len_af:=length(cmd_af);
+        len_vf:=length(cmd_vf);
+        if len_af<>0 then delete(cmd_af,len_af,1);
+        if len_vf<>0 then delete(cmd_vf,len_vf,1);
+        if cmd_af='' then cmd:=cmd+' -c:a copy' else cmd:=cmd+' -af "'+cmd_af+'"';
+        if cmd_vf='' then cmd:=cmd+' -c:v copy' else cmd:=cmd+' -vf "'+cmd_vf+'"';
+
+
         cmd:=cmd+' OutTemp_'+IntToStr(ts)+'.ts';
         batch_lines.add('.\ffmpeg.exe '+cmd);
         inc(ts);
@@ -990,10 +1030,12 @@ begin
 
     //rename output
     batch_lines.add('move Output.mp4 "'+FOutputName+'"');
+    if GenerateBatchOnly then batch_lines.add('pause');
 
     //run batch file
     batch_lines.SaveToFile('video_toggler_gen.bat');
-    ShellExecute(0,'open','cmd.exe','/c call "video_toggler_gen.bat"',pchar(ExtractFileDir(ParamStr(0))),SW_HIDE);
+    if not GenerateBatchOnly then
+      ShellExecute(0,'open','cmd.exe','/c call "video_toggler_gen.bat"',pchar(ExtractFileDir(ParamStr(0))),SW_HIDE);
 
   finally
     batch_lines.Free;

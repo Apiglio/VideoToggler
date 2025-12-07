@@ -5,8 +5,8 @@ unit form_video_toggler;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, LazUTF8,
-  PasLibVlcPlayerUnit, timeline_toggle;
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  Spin, LazUTF8, PasLibVlcPlayerUnit, timeline_toggle, LMessages;
 
 type
 
@@ -17,22 +17,34 @@ type
     Button_AddTag: TButton;
     Button_Run: TButton;
     Button_play: TButton;
+    Button_ReNewBatchOnly: TButton;
     Edit_VideoOutput: TEdit;
     Edit_VideoFileName: TEdit;
     GroupBox_TimelineToggle: TGroupBox;
+    Label_BitRate: TLabel;
+    Label_Width: TLabel;
     Label_input: TLabel;
     Label_output: TLabel;
+    Label_Height: TLabel;
     PasLibVlcPlayer_Preview: TPasLibVlcPlayer;
+    SpinEdit_Height: TSpinEdit;
+    SpinEdit_BitRate: TSpinEdit;
+    SpinEdit_Width: TSpinEdit;
     procedure Button_AddTagClick(Sender: TObject);
     procedure Button_AddTickClick(Sender: TObject);
     procedure Button_playClick(Sender: TObject);
+    procedure Button_ReNewBatchOnlyClick(Sender: TObject);
     procedure Button_RunClick(Sender: TObject);
     procedure Edit_VideoFileNameChange(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormDropFiles(Sender: TObject; const FileNames: array of String);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure PasLibVlcPlayer_PreviewClick(Sender: TObject);
     procedure PasLibVlcPlayer_PreviewMediaPlayerPositionChanged(
       Sender: TObject; aposition: Single);
+    procedure SpinEdit_ScaleChange(Sender: TObject);
   private
 
   public
@@ -44,6 +56,7 @@ var
   TimelineToggle:TTimelineToggle;
 
 implementation
+uses LCLType;
 
 {$R *.lfm}
 
@@ -58,6 +71,7 @@ begin
   //TimelineToggle.MaxPosition:=7200000;
   TimelineToggle.OnUserChangeCursorPos:=@UserChangeCursorPos;
   TimelineToggle.InputName:=UTF8ToWinCP(Edit_VideoFileName.Caption);
+
 end;
 
 procedure TForm_VideoToggler.FormDestroy(Sender: TObject);
@@ -84,6 +98,25 @@ begin
   PasLibVlcPlayer_Preview.Play(WideString(Utf8ToAnsi(Edit_VideoFileName.Text)));
 end;
 
+procedure TForm_VideoToggler.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var video_pos,step_pos:int64;
+begin
+  video_pos:=PasLibVlcPlayer_Preview.GetVideoPosInMs();
+  if ssShift in Shift then step_pos:=5000 else step_pos:=1000;
+  case Key of
+    VK_LEFT:PasLibVlcPlayer_Preview.SetVideoPosInMs(video_pos-step_pos);
+    VK_RIGHT:PasLibVlcPlayer_Preview.SetVideoPosInMs(video_pos+step_pos);
+    VK_SPACE:Button_playClick(Button_play);
+  end;
+end;
+
+procedure TForm_VideoToggler.PasLibVlcPlayer_PreviewClick(Sender: TObject);
+begin
+  SetFocus;
+  //暂停播放可以做
+end;
+
 procedure TForm_VideoToggler.PasLibVlcPlayer_PreviewMediaPlayerPositionChanged(
   Sender: TObject; aposition: Single);
 var ms:int64;
@@ -96,6 +129,13 @@ begin
   end;
   ms:=PasLibVlcPlayer_Preview.GetVideoLenInMs;
   if (ms<>0) and (TimelineToggle.MaxPosition<>ms) then TimelineToggle.MaxPosition:=ms;//MaxPosition为什么一开始为0？
+end;
+
+procedure TForm_VideoToggler.SpinEdit_ScaleChange(Sender: TObject);
+begin
+  TimelineToggle.ForceWidth:=SpinEdit_Width.Value;
+  TimelineToggle.ForceHeight:=SpinEdit_Height.Value;
+  TimelineToggle.ForceKBPS:=SpinEdit_BitRate.Value;
 end;
 
 procedure TForm_VideoToggler.Button_AddTickClick(Sender: TObject);
@@ -118,6 +158,13 @@ begin
   end;
 end;
 
+procedure TForm_VideoToggler.Button_ReNewBatchOnlyClick(Sender: TObject);
+begin
+  TimelineToggle.InputName:=UTF8ToWinCP(Edit_VideoFileName.Caption);
+  TimelineToggle.OutputName:=UTF8ToWinCP(Edit_VideoOutput.Caption);
+  TimelineToggle.Run(true);
+end;
+
 procedure TForm_VideoToggler.Button_RunClick(Sender: TObject);
 begin
   TimelineToggle.InputName:=UTF8ToWinCP(Edit_VideoFileName.Caption);
@@ -132,6 +179,17 @@ begin
   filename:=ExtractFileNameWithoutExt(Edit_VideoFileName.Caption);
   fileext:=ExtractFileExt(Edit_VideoFileName.Caption);
   Edit_VideoOutput.Caption:=filename+'_out'+fileext;
+end;
+
+procedure TForm_VideoToggler.FormClose(Sender: TObject;
+  var CloseAction: TCloseAction);
+begin
+  case PasLibVlcPlayer_Preview.GetState of
+    plvPlayer_Playing:PasLibVlcPlayer_Preview.Stop;
+    plvPlayer_Ended,plvPlayer_NothingSpecial:;
+    plvPlayer_Paused:PasLibVlcPlayer_Preview.Stop;
+    else ;
+  end;
 end;
 
 procedure TForm_VideoToggler.UserChangeCursorPos(ACursorPos:TTimelineTickPos);
